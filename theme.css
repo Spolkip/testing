@@ -1,0 +1,129 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Roboto', sans-serif;
+}
+
+body, html {
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    background-color: white;
+    color: black;
+    transition: background-color 2s, color 1s;
+}
+
+body.dark {
+    background-color: rgb(0, 0, 0);
+    color: rgb(255, 255, 255);
+    z-index: 0;
+}
+
+.try-me {
+    position: absolute;
+    right: 105px;
+    bottom: 110px;
+    font-weight: 900;
+}
+
+.try-me-arrow {
+    position: absolute;
+    right: 48px;
+    bottom: 60px;
+    font-size: 50px;
+}
+
+.mode-tog {
+    background-color: black;
+    position: absolute;
+    right: 50px;
+    bottom: 40px;
+    cursor: pointer;
+    width: 20px;
+    height: 20px;
+    z-index: 3;
+    transition: 1000ms;
+    border-radius: 50%;
+
+    animation: pulse-scale 2s infinite ease-in-out;
+}
+
+.mode-tog.active {
+    background-color: white;
+}
+
+@keyframes pulse-scale {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.5);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.dark-mode-container {
+    position: fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    right: 50px;
+    bottom: 40px;
+    width: 20px;
+    height: 20px;
+}
+
+.dark-mode {
+    position: relative;
+    transform: scale(0);
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: 250vw;
+    height: 250vw;
+    border-radius: 50%;
+    background-color: #000000;
+    transition: 1000ms ease-in-out;
+    display: flex;
+    flex: 0 0 auto;
+    z-index: 0;
+}
+
+.dark-mode.active {
+    transform: scale(1);
+}
+
+.dark-mode.no-transition {
+    transition: none !important;
+}
+
+h1 {
+    position: relative;
+    z-index: 1; 
+}
+
+.accordion-container, .wrapper-main {
+    position: relative;
+    z-index: 1; 
+}
+
+h1 {
+    color: white;
+    mix-blend-mode: difference;
+    position: absolute;
+    left: 35%;
+    top: 40%;
+}
+
+@media (max-width: 600px) {
+    .dark-mode {
+        width: 250vh;
+        height: 250vh;
+    }
+}

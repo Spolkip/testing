@@ -1,0 +1,59 @@
+.wrapper-main { 
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  max-width: 100%;
+  margin-left: 220px;
+}
+
+.register-form {
+    width: 500px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3rem;
+    padding: 3rem;
+}
+
+label {
+    margin-bottom: -30px;
+    color: rgba(0, 0, 0, 0.502);
+    font-weight: 500;
+    font-size: 20px;
+    transition: color 1s;
+}
+
+body.dark label {
+  color: rgba(255, 255, 255, 0.503);
+  transition: color 1s;
+}
+
+input {
+    font-size: 16px;
+    width: 100%;
+    background-color: rgba(240, 248, 255, 0);
+    border: 0px;
+    border-bottom: 1px solid;
+    transition: color 1s, border-bottom-color 1s;
+}
+
+body.dark input {
+    color: white;
+    border-bottom: 1px solid rgb(255, 255, 255);
+    transition: color 1s, border-bottom-color 1s;
+}
+
+input:focus {
+    outline: none;
+    border-bottom: 2px solid;
+}
+
+body.dark input:focus {
+    border-bottom: 2px solid white;
+}
+
+#submit-button {
+    margin-left: 5%;
+    scale: 1.3;
+}

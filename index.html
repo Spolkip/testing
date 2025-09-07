@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="sidenav.css" />
+    <link rel="stylesheet" href="theme.css" />
+    <link rel="stylesheet" href="buttons.css" />
+    <link rel="stylesheet" href="accordion.css" />
+    <link rel="stylesheet" href="modal.css" />
+    <script src="api-call.js"></script>
+    <script defer src="theme.js"></script>
+    <script src="modal.js"></script>
+  </head>
+  <body>
+    
+    <div class="try-me">Κάνε 'κλικ' στον κύκλο!</div>
+    <div class="try-me-arrow">⤵</div>
+    <div class="mode-tog"></div>
+
+    <div class="dark-mode-container">
+      <div class="dark-mode"></div>
+    </div>
+    
+    <nav class="sidenav">
+      <a href="index.html" class="logo-link">
+        <img class="logo" src="Images/logo.png" alt="logo" />
+      </a>
+    </nav>
+
+    <div class="sign-container">
+      <div class="sign-buttons">
+        <div data-type="register" class="auth-button-modal buttons"><span>ΕΓΓΡΑΦΗ</span></div>
+        <div data-type="login" class="auth-button-modal buttons"><span>ΕΙΣΟΔΟΣ</span></div>
+      </div>
+    
+      <div class="help">
+        Χρειάζεσαι βοήθεια; Κάνε κλικ <a href="help.html">Εδώ!</a>
+      </div>
+    </div>
+
+    <div class="accordion-container">
+      <div class="accordion">
+        <div class="accordion-item" id="question1">
+          <a class="accordion-link" href="#question1">
+            <div class="flex">
+              <h3>ΣΚΟΠΟΣ</h3>
+              <ul>
+                <li>#Figma</li>
+                <li>#Sketch</li>
+                <li>#Adobe</li>
+                <li>#Invision</li>
+                <li>#Protopie</li>
+              </ul>
+            </div>
+            <i class="icon ion-md-arrow-forward"></i>
+            <i class="icon ion-md-arrow-down"></i>
+          </a>
+          <div class="answer">
+            <p>Ο ιστοτόπος έχει σκοπό την παρουσίαση μια διαδικτυακής σελίδας αναπαραγωγής περιεχομένου ροής, αξιοποιώντας τεχνολογίες διαδικτύου, συμπεριλαμβανομένων html, css, javascript, php, xml & REST api, και μια σχεσιακή βάση δεδομένων mysql.
+            </p>
+          </div>
+          <hr>
+        </div>
+        <div class="accordion-item" id="question2">
+          <a class="accordion-link" href="#question2">
+            <div class="flex">
+              <h3>ΕΓΓΡΑΦΗ</h3>
+              <ul>
+                <li>#Figma</li>
+                <li>#Sketch</li>
+                <li>#Adobe</li>
+                <li>#Invision</li>
+                <li>#Protopie</li>
+              </ul>
+            </div>
+            <i class="icon ion-md-arrow-forward"></i>
+            <i class="icon ion-md-arrow-down"></i>
+          </a>
+          <div class="answer">
+            <p>Η εγγραφή γίνεται εύκολα μέσω της φόρμας εγγραφής, πατώντας στο πεδίο "ΕΓΓΡΑΦΗ" στο πάνω δεξιά μέρος της σελίδας.</p>
+          </div>
+          <hr>
+        </div>
+        <div class="accordion-item" id="question3">
+          <a class="accordion-link" href="#question3">
+            <div class="flex">
+              <h3>ΓΙΑΤΙ;</h3>
+              <ul>
+                <li>#πως</li>
+                <li>#να</li>
+                <li>#κάνω</li>
+                <li>#εγγραφή</li>
+                <li>#;</li>
+              </ul>
+            </div>
+          </a>
+          <div class="answer">
+            <p>Με την εγγραφή σου, αποκτάς τον έλεγχο του περιεχομένου που σου εμφανίζεται! Δημιούργησε τις δικές σου λίστες ροής και μοιράσου τις με άλλους χρήστες που σε εμπνέουν. Οι λίστες τους θα εμφανίζονται στο προφίλ τους για να ανακαλύπτεις συνεχώς νέο, ενδιαφέρον περιεχόμενο!
+            </p>
+          </div>
+          <hr>
+        </div>
+      </div>
+    </div>
+
+    <div id="loginModal" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <form id="loginForm" class="register-form" method="post">
+          <div class="label-input">
+            <label for="username">ΟΝΟΜΑ ΧΡΗΣΤΗ</label>
+            <input type="text" name="username" required>
+          </div>
+          <div class="label-input">
+            <label for="password">ΚΩΔΙΚΟΣ</label>
+            <input type="password" name="password" required>
+          </div>
+          <div>
+            <input type="checkbox" id="remember-me" name="remember-me" value="0">
+            <label for="remember-me">Να με θυμάσαι</label>
+          </div>
+          <div class="buttons auth-button"><span>ΕΙΣΟΔΟΣ</span></div>
+          <div id="login-a">
+            Ξέχασες τον <a href="#">κωδικό</a> σου;
+          </div>
+          <div class="error-messagebox" style="color:red; font-weight:bold; text-align:center; margin-top:10px;">
+              &nbsp;
+          </div>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div id="registerModal" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <form id="registerForm" class="register-form" method="post">
+          <div class="label-input">
+            <label for="firstname">ΟΝΟΜΑ</label>
+            <input type="text" name="firstname" required>
+          </div>
+          <div class="label-input">
+            <label for="lastname">ΕΠΩΝΥΜΟ</label>
+            <input type="text" name="lastname" required>
+          </div>
+          <div class="label-input">
+            <label for="username">ΟΝΟΜΑ ΧΡΗΣΤΗ</label>
+            <input type="text" name="username" required>
+          </div>
+          <div class="label-input">
+            <label for="email">EMAIL</label>
+            <input type="email" name="email" required>
+          </div>
+          <div class="label-input">
+            <label for="password">ΚΩΔΙΚΟΣ</label>
+            <input type="password" name="password" required>
+          </div>
+          <div class="buttons auth-button"><span>ΕΓΓΡΑΦΗ</span></div>
+          <div class="error-messagebox" style="color:red; font-weight:bold; text-align:center; margin-top:10px;">
+            &nbsp;
+          </div>
+        </form>
+      </div>
+    </div>
+  </body>
+</html>

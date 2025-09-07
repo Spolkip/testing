@@ -1,0 +1,2126 @@
+This file is a merged representation of the entire codebase, combined into a single document by Repomix.
+
+<file_summary>
+This section contains a summary of this file.
+
+<purpose>
+This file contains a packed representation of the entire repository's contents.
+It is designed to be easily consumable by AI systems for analysis, code review,
+or other automated processes.
+</purpose>
+
+<file_format>
+The content is organized as follows:
+1. This summary section
+2. Repository information
+3. Directory structure
+4. Repository files (if enabled)
+5. Multiple file entries, each consisting of:
+  - File path as an attribute
+  - Full contents of the file
+</file_format>
+
+<usage_guidelines>
+- This file should be treated as read-only. Any changes should be made to the
+  original repository files, not this packed version.
+- When processing this file, use the file path to distinguish
+  between different files in the repository.
+- Be aware that this file may contain sensitive information. Handle it with
+  the same level of security as you would the original repository.
+</usage_guidelines>
+
+<notes>
+- Some files may have been excluded based on .gitignore rules and Repomix's configuration
+- Binary files are not included in this packed representation. Please refer to the Repository Structure section for a complete list of file paths, including binary files
+- Files matching patterns in .gitignore are excluded
+- Files matching default ignore patterns are excluded
+- Files are sorted by Git change count (files with more changes are at the bottom)
+</notes>
+
+</file_summary>
+
+<directory_structure>
+.gitignore
+accordion.css
+api-call.js
+auth.php
+buttons.css
+demo_defer.js
+feed.css
+help.html
+index.html
+index.php
+login.php
+main.html
+modal.css
+modal.js
+profile.html
+profile.php
+README.md
+register.css
+register.php
+sidenav.css
+src/controller.php
+src/database.php
+src/googleauth.php
+test.css
+test.html
+test.js
+theme.css
+theme.js
+</directory_structure>
+
+<files>
+This section contains the contents of the repository's files.
+
+<file path=".gitignore">
+**/vendor/
+</file>
+
+<file path="accordion.css">
+.accordion-container{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  max-width: 100%;
+  padding: 10px;
+  margin-left: 220px;
+}
+
+.accordion-link,
+.accordion-link *,
+.accordion a,
+.accordion a * {
+  text-decoration: none !important;
+}
+
+.accordion {
+  width: 50%;
+  margin-top: 10%;
+}
+
+.accordion-item{
+  border-radius: .4rem;
+}
+
+.accordion-link{
+  font-size: 1.6rem;
+  text-decoration: none;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 0;
+}
+
+.accordion-link h3{
+  color: rgba(0, 0, 0, 0.502);
+  font-weight:500;
+  font-size: 20px;
+  transition: color 1s;
+}
+
+
+.accordion-link i{
+  padding: .5rem;
+  
+}
+
+.accordion-link ul{
+  color: red;
+  display:flex;
+  align-items: flex-end;
+  list-style-type: none;
+  margin-left: 25px;
+}
+
+.accordion-link li{
+  font-size: 10px;
+  padding: 0 0 1px 5px;
+}
+
+body.dark .accordion-link h3 {
+  color: rgba(255, 255, 255, 0.503);
+  transition: color 1s;
+}
+
+.accordion-link div{
+  display: flex;
+}
+
+.answer{
+  max-height: 0;
+  overflow: hidden;
+  position: relative;
+  transition: max-height 650ms;
+}
+
+.answer p{
+  font-size: 15px;
+  padding: 2rem;
+  
+}
+
+.accordion-item:target .answer{
+  max-height: 20rem;
+}
+</file>
+
+<file path="api-call.js">
+function callBack(element) {
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            this.responseText;
+       }
+    };
+    xhttp.open("GET", "index.php/?action=" + element.getAttribute("name"), true);
+    xhttp.send();
+}
+
+window.addEventListener("load", () => {
+    let authButtons = document.querySelectorAll("[name *= auth-button-]"); //https://www.w3schools.com/cssref/css_selectors.php
+    authButtons.forEach(function(button){
+        button.addEventListener("click", function(){
+            console.log(this)
+            //callBack(this); //κάτσε διάβασε τι κάνει το This
+        }); //σε addEventListener δεν μπορώ να βάλω παραμέτρους άρα αυτό που κάνω είναι ανοίγω ένα function
+    });
+})
+</file>
+
+<file path="auth.php">
+<?php
+require(__DIR__ . '/vendor/autoload.php');
+include("./src/auth.php");
+
+$googleAuth = new GoogleAuth();
+</file>
+
+<file path="buttons.css">
+.sign-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  border: 2px solid red;
+  height: 90px;
+}
+
+.sign-buttons {
+  display: flex;
+  justify-content: end;
+}
+
+.buttons{
+  background-color: rgb(0, 0, 0);
+  color: rgb(255, 255, 255);
+  margin: 20px 20px 0 0;
+  padding: 10px 15px;
+  width: 50%;
+  border: solid 2px white;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold!important;
+  text-decoration: none;
+  transition: background-color 0.3s;
+  z-index: 3;
+}
+
+body:not(.dark) .buttons:not(.auth-button):hover {
+  color: red;
+}
+
+body.dark .buttons:not(.auth-button):hover {
+  border-color: red;
+}
+
+.help {
+  margin: 20px 22px;
+  text-align: right;
+  z-index: 3;
+}
+
+a {
+  color: red;
+  font-weight: bold!important; 
+  text-decoration: none;
+  font-weight: 500;
+}
+
+a:hover {
+  color: rgb(195, 0, 0);
+}
+
+.profile-icon img{
+  position: relative;
+  border: 3px solid;
+  vertical-align: middle;
+  margin-top: 15px;
+  margin-right: 15px;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  z-index: 3;
+}
+</file>
+
+<file path="demo_defer.js">
+window.addEventListener("DOMContentLoaded", () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get("success") === "1") {
+        alert("Η εγγραφή ήταν επιτυχής!");
+        window.history.replaceState(null, "", window.location.pathname);
+    }
+});
+
+const form = document.querySelector(".register-form");
+
+form.addEventListener("submit", function(event) {
+    const firstname = document.getElementById("firstname").value.trim();
+    const lastname = document.getElementById("lastname").value.trim();
+    const username = document.getElementById("username").value.trim();
+    const email = document.getElementById("email").value.trim();
+    const password = document.getElementById("password").value.trim();
+
+    if (!firstname || !lastname || !username || !email || !password) {
+        alert("Όλα τα πεδία είναι υποχρεωτικά!");
+        event.preventDefault(); 
+    }
+});
+</file>
+
+<file path="feed.css">
+.feed-container {
+  width: 100%;
+  max-width: calc(100vw - 220px); 
+  max-height: 100vh;
+  height: 100%;
+  margin-left: 220px;
+  overflow-y: scroll; 
+  overflow-x: hidden;
+  border: none;
+  z-index: 2;
+}
+
+.feed {
+  display: flex;
+  flex-direction: column;
+  border: none;
+  z-index: 2;
+}
+
+.feed-item {
+  width: 100%;
+  height: 250px; 
+  border: none;
+  overflow: hidden;
+  z-index: 2;
+}
+
+.feed-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  border-top: 2px solid;   
+  border-bottom: 2px solid;
+  border-left: none; 
+  border-right: none;
+  transition: transform 0.3s;
+  z-index: 2;
+}
+/* 
+.feed-item img:hover {
+  transform: scale(1.05);
+  z-index: 2;
+} */
+</file>
+
+<file path="help.html">
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="sidenav.css" />
+    <link rel="stylesheet" href="theme.css" />
+    <link rel="stylesheet" href="buttons.css" />
+    <link rel="stylesheet" href="accordion.css" />
+    <script defer src="theme.js"></script>
+    <script defer src="accordion.js"></script>
+
+  </head>
+  <body>
+    
+    <div class="mode-tog"></div>
+
+    <div class="dark-mode-container">
+      <div class="dark-mode"></div>
+    </div>
+    
+    <nav class="sidenav">
+      <a href="index.html" class="logo-link">
+        <img class="logo" src="Images/logo.png" alt="logo" />
+      </a>
+    </nav>
+
+    <div class="sign-container">
+      <div class="sign-buttons">
+        <a href="register.php" class="buttons"><span>ΕΓΓΡΑΦΗ</span></a>
+        <a href="login.php" class="buttons"><span>ΕΙΔΟΣΟΣ</span></a>
+    </div>
+    
+    <div class="help">
+        ㅤ
+      </div>
+    </div>
+
+    <div class="accordion-container">
+      <div class="accordion">
+        <div class="accordion-item" id="question1">
+          <a class="accordion-link" href="#question1">
+            <div class="flex">
+              <h3>Πώς κάνω εγγραφή;</h3>
+              <ul>
+                <li>#How</li>
+                <li>#To</li>
+                <li>#Sign</li>
+                <li>#Up?</li>
+              </ul>
+            </div>
+            <i class="icon ion-md-arrow-forward"></i>
+            <i class="icon ion-md-arrow-down"></i>
+          </a>
+          <div class="answer">
+            <p>Πατώντας το πεδίο "ΕΓΓΡΑΦΗ" πάνω δεξιά, μπορείς να εισάγεις τα στοιχεία σου και να γίνει μέλος της διαδικτυακής κοινότητας μας!.
+            </p>
+          </div>
+          <hr>
+        </div>
+        <div class="accordion-item" id="question2">
+          <a class="accordion-link" href="#question2">
+            <div class="flex">
+              <h3>Ολοκλήρωσα την εγγραφή μου. Τώρα τι;</h3>
+              <ul>
+                <li>#Registration</li>
+                <li>#Complete.</li>
+                <li>#Now</li>
+                <li>#What?</li>
+              </ul>
+            </div>
+            <i class="icon ion-md-arrow-forward"></i>
+            <i class="icon ion-md-arrow-down"></i>
+          </a>
+          <div class="answer">
+            <p>Μπορείς </p>
+          </div>
+          <hr>
+        </div>
+        <div class="accordion-item" id="question3">
+          <a class="accordion-link" href="#question3">
+            <div class="flex">
+              <h3>ΓΙΑΤΙ;</h3>
+              <ul>
+                <li>#πως</li>
+                <li>#να</li>
+                <li>#κάνω</li>
+                <li>#εγγραφή</li>
+                <li>#;</li>
+              </ul>
+            </div>
+            <i class="icon ion-md-arrow-forward"></i>
+            <i class="icon ion-md-arrow-down"></i>
+          </a>
+          <div class="answer">
+            <p>Με την εγγραφή σου, αποκτάς τον έλεγχο του περιεχομένου που σου εμφανίζεται! Δημιούργησε τις δικές σου λίστες ροής και μοιράσου τις με άλλους χρήστες που σε εμπνέουν. Οι λίστες τους θα εμφανίζονται στο προφίλ τους για να ανακαλύπτεις συνεχώς νέο, ενδιαφέρον περιεχόμενο!
+            </p>
+          </div>
+          <hr>
+        </div>
+      </div>
+    </div>
+
+  </body>
+</html>
+</file>
+
+<file path="index.html">
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="sidenav.css" />
+    <link rel="stylesheet" href="theme.css" />
+    <link rel="stylesheet" href="buttons.css" />
+    <link rel="stylesheet" href="accordion.css" />
+    <link rel="stylesheet" href="modal.css" />
+    <script src="api-call.js"></script>
+    <script defer src="theme.js"></script>
+    <script src="modal.js"></script>
+  </head>
+  <body>
+    
+    <div class="try-me">Κάνε 'κλικ' στον κύκλο!</div>
+    <div class="try-me-arrow">⤵</div>
+    <div class="mode-tog"></div>
+
+    <div class="dark-mode-container">
+      <div class="dark-mode"></div>
+    </div>
+    
+    <nav class="sidenav">
+      <a href="index.html" class="logo-link">
+        <img class="logo" src="Images/logo.png" alt="logo" />
+      </a>
+    </nav>
+
+    <div class="sign-container">
+      <div class="sign-buttons">
+        <div data-type="register" class="auth-button-modal buttons"><span>ΕΓΓΡΑΦΗ</span></div>
+        <div data-type="login" class="auth-button-modal buttons"><span>ΕΙΣΟΔΟΣ</span></div>
+      </div>
+    
+      <div class="help">
+        Χρειάζεσαι βοήθεια; Κάνε κλικ <a href="help.html">Εδώ!</a>
+      </div>
+    </div>
+
+    <div class="accordion-container">
+      <div class="accordion">
+        <div class="accordion-item" id="question1">
+          <a class="accordion-link" href="#question1">
+            <div class="flex">
+              <h3>ΣΚΟΠΟΣ</h3>
+              <ul>
+                <li>#Figma</li>
+                <li>#Sketch</li>
+                <li>#Adobe</li>
+                <li>#Invision</li>
+                <li>#Protopie</li>
+              </ul>
+            </div>
+            <i class="icon ion-md-arrow-forward"></i>
+            <i class="icon ion-md-arrow-down"></i>
+          </a>
+          <div class="answer">
+            <p>Ο ιστοτόπος έχει σκοπό την παρουσίαση μια διαδικτυακής σελίδας αναπαραγωγής περιεχομένου ροής, αξιοποιώντας τεχνολογίες διαδικτύου, συμπεριλαμβανομένων html, css, javascript, php, xml & REST api, και μια σχεσιακή βάση δεδομένων mysql.
+            </p>
+          </div>
+          <hr>
+        </div>
+        <div class="accordion-item" id="question2">
+          <a class="accordion-link" href="#question2">
+            <div class="flex">
+              <h3>ΕΓΓΡΑΦΗ</h3>
+              <ul>
+                <li>#Figma</li>
+                <li>#Sketch</li>
+                <li>#Adobe</li>
+                <li>#Invision</li>
+                <li>#Protopie</li>
+              </ul>
+            </div>
+            <i class="icon ion-md-arrow-forward"></i>
+            <i class="icon ion-md-arrow-down"></i>
+          </a>
+          <div class="answer">
+            <p>Η εγγραφή γίνεται εύκολα μέσω της φόρμας εγγραφής, πατώντας στο πεδίο "ΕΓΓΡΑΦΗ" στο πάνω δεξιά μέρος της σελίδας.</p>
+          </div>
+          <hr>
+        </div>
+        <div class="accordion-item" id="question3">
+          <a class="accordion-link" href="#question3">
+            <div class="flex">
+              <h3>ΓΙΑΤΙ;</h3>
+              <ul>
+                <li>#πως</li>
+                <li>#να</li>
+                <li>#κάνω</li>
+                <li>#εγγραφή</li>
+                <li>#;</li>
+              </ul>
+            </div>
+          </a>
+          <div class="answer">
+            <p>Με την εγγραφή σου, αποκτάς τον έλεγχο του περιεχομένου που σου εμφανίζεται! Δημιούργησε τις δικές σου λίστες ροής και μοιράσου τις με άλλους χρήστες που σε εμπνέουν. Οι λίστες τους θα εμφανίζονται στο προφίλ τους για να ανακαλύπτεις συνεχώς νέο, ενδιαφέρον περιεχόμενο!
+            </p>
+          </div>
+          <hr>
+        </div>
+      </div>
+    </div>
+
+    <div id="loginModal" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <form id="loginForm" class="register-form" method="post">
+          <div class="label-input">
+            <label for="username">ΟΝΟΜΑ ΧΡΗΣΤΗ</label>
+            <input type="text" name="username" required>
+          </div>
+          <div class="label-input">
+            <label for="password">ΚΩΔΙΚΟΣ</label>
+            <input type="password" name="password" required>
+          </div>
+          <div>
+            <input type="checkbox" id="remember-me" name="remember-me" value="0">
+            <label for="remember-me">Να με θυμάσαι</label>
+          </div>
+          <div class="buttons auth-button"><span>ΕΙΣΟΔΟΣ</span></div>
+          <div id="login-a">
+            Ξέχασες τον <a href="#">κωδικό</a> σου;
+          </div>
+          <div class="error-messagebox" style="color:red; font-weight:bold; text-align:center; margin-top:10px;">
+              &nbsp;
+          </div>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div id="registerModal" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <form id="registerForm" class="register-form" method="post">
+          <div class="label-input">
+            <label for="firstname">ΟΝΟΜΑ</label>
+            <input type="text" name="firstname" required>
+          </div>
+          <div class="label-input">
+            <label for="lastname">ΕΠΩΝΥΜΟ</label>
+            <input type="text" name="lastname" required>
+          </div>
+          <div class="label-input">
+            <label for="username">ΟΝΟΜΑ ΧΡΗΣΤΗ</label>
+            <input type="text" name="username" required>
+          </div>
+          <div class="label-input">
+            <label for="email">EMAIL</label>
+            <input type="email" name="email" required>
+          </div>
+          <div class="label-input">
+            <label for="password">ΚΩΔΙΚΟΣ</label>
+            <input type="password" name="password" required>
+          </div>
+          <div class="buttons auth-button"><span>ΕΓΓΡΑΦΗ</span></div>
+          <div class="error-messagebox" style="color:red; font-weight:bold; text-align:center; margin-top:10px;">
+            &nbsp;
+          </div>
+        </form>
+      </div>
+    </div>
+  </body>
+</html>
+</file>
+
+<file path="index.php">
+<?php
+session_start();  // <-- MUST be first line
+
+include("./src/controller.php"); // Σκέτη / σε path είναι το root path του σέρβερ 
+include("./src/database.php");
+
+if ($_SERVER['REQUEST_METHOD'] == 'GET') {
+    $action = htmlspecialchars($_GET['action']); // htmlspecialchars μετατρέπει ό,τι βάλει ο χρήστης ως String για να μην εκτελλεί κακόβουλο input
+    $action = str_replace('auth-button-', '', $action);
+} elseif ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $action = htmlspecialchars($_POST['action']);
+}
+
+try {
+    $controller = new Controller($conn);
+    $controller->setRequestMethod($_SERVER['REQUEST_METHOD']);
+    $response = $controller->$action();
+    echo json_encode($response);
+} catch(Exception $e) {
+//     http_response_code(500);
+//     echo json_encode($e->getMessage());
+    http_response_code(400); // use 400 for validation errors
+    echo json_encode(["error" => $e->getMessage()]);
+}
+exit;
+</file>
+
+<file path="login.php">
+<?php
+
+
+$host = "localhost";
+$port = 8889;
+$dbname = "texnologies_diadiktiou_db";
+$db_username = "root";
+$db_password = "root";
+$socket = '/Applications/MAMP/tmp/mysql/mysql.sock';
+
+$conn = mysqli_connect($host, 
+$db_username, 
+$db_password, 
+$dbname, 
+$port, 
+$socket);
+
+if (mysqli_connect_errno()) {
+    die("Connection error: " . mysqli_connect_error());
+}
+
+echo "<script>console.log('Connection Successful');</script>";
+
+if(isset($_POST['submit'])){
+$username= $_POST["username"];
+$password = $_POST["password"];
+
+$sql = "select * from user_data where username = '$username' and password = '$password'";
+$result = mysqli_query($conn, $sql);
+$row = mysqli_fetch_array($result, MYSQLI_ASSOC);
+$count = mysqli_num_rows($result);
+if($count==1){
+    header("Location: index.html");
+}
+else{
+    echo "<script>console.log('No match!');</script>";
+}
+}
+?>
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login Modal</title>
+  <link rel="stylesheet" href="sidenav.css" />
+  <link rel="stylesheet" href="theme.css" />
+  <link rel="stylesheet" href="buttons.css" />
+  <link rel="stylesheet" href="register.css" />
+  <script defer src="theme.js"></script>
+  <script src="demo_defer.js" defer></script>
+  <style>
+    /* Modal background */
+    .modal {
+      display: none; /* hidden by default */
+      position: fixed;
+      z-index: 999;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.6);
+      justify-content: center;
+      align-items: center;
+    }
+
+    /* Modal content */
+    .modal-content {
+      background: #fff;
+      padding: 2rem;
+      border-radius: 12px;
+      max-width: 400px;
+      width: 90%;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+      position: relative;
+      animation: fadeIn 0.3s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from {opacity: 0; transform: translateY(-20px);}
+      to {opacity: 1; transform: translateY(0);}
+    }
+
+    /* Close button */
+    .close {
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      font-size: 1.5rem;
+      cursor: pointer;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="mode-tog"></div>
+  <div class="dark-mode-container">
+    <div class="dark-mode"></div>
+  </div>
+
+  <nav class="sidenav">
+    <a href="index.html" class="logo-link">
+      <img class="logo" src="Images/logo.png" alt="logo" />
+    </a>
+  </nav>
+
+  <!-- Button to trigger modal -->
+  <section class="wrapper-main">
+    <button id="openModal" class="buttons">Log in</button>
+  </section>
+
+  <!-- Modal -->
+  <div id="loginModal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <form class="register-form" method="post">
+        <label for="username">ΟΝΟΜΑ ΧΡΗΣΤΗ</label>
+        <input type="text" id="username" name="username" required>
+        <label for="password">ΚΩΔΙΚΟΣ</label>
+        <input type="password" id="password" name="password" required>
+        <button id="submit-button" class="buttons" type="submit" value="login" name="submit">ΥΠΟΒΟΛΗ</button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    const modal = document.getElementById("loginModal");
+    const openBtn = document.getElementById("openModal");
+    const closeBtn = document.querySelector(".close");
+
+    // Open modal
+    openBtn.onclick = () => {
+      modal.style.display = "flex";
+    };
+
+    // Close modal
+    closeBtn.onclick = () => {
+      modal.style.display = "none";
+    };
+
+    // Close when clicking outside modal
+    window.onclick = (e) => {
+      if (e.target === modal) {
+        modal.style.display = "none";
+      }
+    };
+  </script>
+
+</body>
+</html>
+</file>
+
+<file path="main.html">
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="sidenav.css" />
+    <link rel="stylesheet" href="theme.css" />
+    <link rel="stylesheet" href="buttons.css" />
+    <link rel="stylesheet" href="accordion.css" />
+    <link rel="stylesheet" href="modal.css" />
+    <link rel="stylesheet" href="feed.css" />
+    <script src="api-call.js"></script>
+    <script defer src="theme.js"></script>
+    <script src="modal.js"></script>
+  </head>
+  <body>
+    
+    <div class="mode-tog"></div>
+
+    <div class="dark-mode-container">
+      <div class="dark-mode"></div>
+    </div>
+    
+    <nav class="sidenav">
+      <a href="index.html" class="logo-link">
+        <img class="logo" src="Images/logo.png" alt="logo" />
+      </a>
+    </nav>
+
+    <div class="sign-container">
+      <div class="profile-icon auth-button-modal" data-type="edit">
+        <img src="Images/user-icon.png" alt="User Icon">
+      </div>
+    </div>
+
+    <div class="feed-container">
+    <div class="feed">
+    <div class="feed-item"><img></div>
+    <div class="feed-item"><img></div>
+    <div class="feed-item"><img></div>
+    <div class="feed-item"><img></div>
+    <div class="feed-item"><img></div>
+
+    <div id="editModal" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <form id="editForm" class="register-form" method="post">
+          <div class="label-input">
+            <label for="firstname">ΟΝΟΜΑ</label>
+            <input type="text" name="firstname" required>
+          </div>
+          <div class="label-input">
+            <label for="lastname">ΕΠΩΝΥΜΟ</label>
+            <input type="text" name="lastname" required>
+          </div>
+          <div class="label-input">
+            <label for="username">ΟΝΟΜΑ ΧΡΗΣΤΗ</label>
+            <input type="text" name="username" required>
+          </div>
+          <div class="label-input">
+            <label for="email">EMAIL</label>
+            <input type="email" name="email" required>
+          </div>
+          <div class="label-input">
+            <label for="password">ΚΩΔΙΚΟΣ</label>
+            <input type="password" name="password" required>
+          </div>
+          <div class="buttons auth-button"><span>ΑΝΑΣΕΩΣΗ</span></div>
+          <div class="error-messagebox" style="color:red; font-weight:bold; text-align:center; margin-top:10px;">
+            &nbsp;
+          </div>
+        </form>
+      </div>
+    </div>
+    
+  </div>
+</div>
+
+
+  </body>
+</html>
+</file>
+
+<file path="modal.css">
+.modal {
+  display: none; 
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.6);
+  justify-content: center;
+  align-items: center;
+}
+
+.modal.active {
+  display: flex;
+}
+
+.modal-content {
+  color: black;
+  background: #fff;
+  padding: 2rem;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-left: 220px;
+  max-height: 600px;
+  height: 50;
+  max-width: 400px;
+  width: 100%;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+  position: relative;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {opacity: 0; transform: translateY(-20px);}
+  to {opacity: 1; transform: translateY(0);}
+}
+
+.register-form {
+  display: flex;
+  flex-direction: column;
+  width: 80%;
+  gap: 1rem;
+}
+
+.label-input {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  font-weight: 500;
+}
+
+input[type="text"],
+input[type="password"],
+input[type="email"] {
+  all: unset;
+  padding: 10px;
+  font-size: 16px;
+  outline: 1px solid black;
+  border-radius: 5px;
+}
+
+input[type="text"]:focus,
+input[type="password"]:focus,
+input[type="email"]:focus {
+  outline: 2px solid black;
+}
+
+.auth-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  background-color: red;
+  width: 100%;
+  padding: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: 500;
+  text-align: center;
+}
+
+.auth-button:hover {
+  background-color: rgb(195, 0, 0);
+}
+
+input[type="checkbox"] {
+  accent-color: red;
+}
+
+#login-a {
+  align-self: center;
+  text-align: center;
+  margin-top: 10px;
+}
+
+.close {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+@media (max-width: 500px) {
+  .modal-content {
+    margin-left: 0;
+    width: 90%;
+    height: auto;
+    padding: 1.5rem;
+  }
+}
+</file>
+
+<file path="modal.js">
+document.addEventListener("DOMContentLoaded", () => {
+  const authBtns = document.querySelectorAll(".auth-button-modal");
+  const closeBtns = document.querySelectorAll(".modal .close");
+  const rememberMeButton = document.getElementById('remember-me');
+  const submitButtons = document.querySelectorAll(".modal .auth-button");
+  let isSubmitting = false;
+  let modal;
+  let buttonType;
+
+  // Open modal
+  Array.prototype.forEach.call(authBtns, function(button) {
+    button.addEventListener("click", () => {
+      buttonType = button.getAttribute('data-type');
+      if (buttonType == 'login') {
+        modal = document.getElementById('loginModal');
+      } else if (buttonType == 'register') {
+        modal = document.getElementById('registerModal');
+      } else if (buttonType == 'edit') {
+        modal = document.getElementById('editModal');
+        fetch("index.php?action=getUser")
+        .then(response => response.json())
+        .then(data => {
+          const form = modal.querySelector('form');
+          form.firstname.value = data.first_name;
+          form.lastname.value = data.last_name;
+          form.username.value = data.username;
+          form.email.value = data.email;
+          form.password.value = ""; // leave empty for security
+        })
+        .catch(err => {
+          console.error("Error fetching user data", err);
+        });
+      }
+
+      // Reset form and error message
+      const form = modal.querySelector('form');
+      form.reset();
+      const messageBox = form.querySelector('.error-messagebox');
+      if (messageBox) messageBox.innerHTML = "&nbsp;";
+
+      // Reset input borders
+      form.querySelectorAll("input").forEach(i => i.classList.remove("error"));
+
+      modal.style.display = "flex";
+    });
+  });
+
+  closeBtns.forEach(btn => {
+    btn.addEventListener("click", () => {
+      btn.closest(".modal").style.display = "none";
+    });
+  });
+
+  window.addEventListener("click", (event) => {
+    if (modal && event.target === modal) {
+      modal.style.display = "none";
+    }
+  });
+
+  if (rememberMeButton) {
+    rememberMeButton.addEventListener('click', function() {
+      this.value = this.checked ? 1 : 0;
+    });
+  }
+
+  if (submitButtons) {
+    Array.prototype.forEach.call(submitButtons, function(button) {
+      button.addEventListener('click', async () => {
+        if (isSubmitting) return;
+        isSubmitting = true;
+
+        const form = document.getElementById(buttonType + 'Form');
+        const messageBox = form.querySelector('.error-messagebox');
+
+        if (messageBox) messageBox.innerHTML = "&nbsp;";
+        form.querySelectorAll("input").forEach(i => i.classList.remove("error"));
+
+        const data = new FormData(form);
+        data.append("action", buttonType);
+
+        try {
+          const response = await fetch("index.php", { method: "POST", body: data });
+          const result = await response.json();
+
+          if (!response.ok) {
+            throw new Error(result.error || "Κάτι πήγε στραβά!");
+          }
+
+          const messageBox = form.querySelector('.error-messagebox');
+
+          if (buttonType === "register") {
+            // Εμφάνιση μηνύματος επιτυχίας για εγγραφή
+            if (messageBox) {
+              messageBox.style.color = "green";  // <-- change text to green
+              messageBox.innerHTML = "Επιτυχής εγγραφή! Μπορείς τώρα να συνδεθείς.";
+            }
+          } else if (result.redirect) {
+            window.location.href = result.redirect;
+          } else if (result.closeModal) {
+            form.closest(".modal").style.display = "none";
+            form.reset();
+          }
+        } catch (error) {
+          // Highlight inputs and show error
+          form.querySelectorAll("input[required]").forEach(i => i.classList.add("error"));
+          if (messageBox) {
+            messageBox.style.color = "red"; // ensure error is red
+            messageBox.innerHTML = error.message;
+          }
+        } finally {
+          isSubmitting = false;
+        }
+      });
+    });
+  }
+});
+</file>
+
+<file path="profile.html">
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="sidenav.css" />
+    <link rel="stylesheet" href="theme.css" />
+    <link rel="stylesheet" href="buttons.css" />
+    <link rel="stylesheet" href="accordion.css" />
+    <link rel="stylesheet" href="profile.css" />
+    <script src="api-call.js"></script>
+    <script defer src="theme.js"></script>
+    <script src="modal.js"></script>
+  </head>
+  <body>
+    
+    <div class="mode-tog"></div>
+
+    <div class="dark-mode-container">
+      <div class="dark-mode"></div>
+    </div>
+    
+    <!-- <nav class="sidenav">
+      <a href="index.html" class="logo-link">
+        <img class="logo" src="Images/logo.png" alt="logo" />
+      </a>
+    </nav> -->
+
+  </body>
+</html>
+</file>
+
+<file path="profile.php">
+<?php
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    $host = "localhost";
+    $port = 8889;
+    $dbname = "texnologies_diadiktiou_db";
+    $db_username = "root";
+    $db_password = "root";
+    $socket = '/Applications/MAMP/tmp/mysql/mysql.sock';
+
+    $conn = mysqli_connect($host, $db_username, $db_password, $dbname, $port, $socket);
+
+    if (mysqli_connect_errno()) {
+        die("Connection error: " . mysqli_connect_error());
+    }
+
+    $id = 23; 
+
+    if (isset($_POST["update"])) {
+        $first_name = $_POST["firstname"];
+        $last_name  = $_POST["lastname"];
+        $username   = $_POST["username"];
+        $email      = $_POST["email"];
+        $password   = $_POST["password"]; 
+
+        $sql = "UPDATE user_data 
+                SET first_name = ?, last_name = ?, username = ?, email = ?, password = ? 
+                WHERE id = ?";
+
+        $stmt = mysqli_stmt_init($conn);
+        if (!mysqli_stmt_prepare($stmt, $sql)) {
+            die("SQL error: " . mysqli_error($conn));
+        }
+
+        mysqli_stmt_bind_param($stmt, "sssssi", 
+            $first_name,
+            $last_name,
+            $username,
+            $email,
+            $password,
+            $id
+        );
+
+        if (mysqli_stmt_execute($stmt)) {
+            $success = "Τα στοιχεία σου ενημερώθηκαν!";
+        } else {
+            $error = "Update failed: " . mysqli_error($conn);
+        }
+
+        mysqli_stmt_close($stmt);
+
+    } elseif (isset($_POST["delete"])) {
+        $sql = "DELETE FROM user_data WHERE id = ?";
+        $stmt = mysqli_stmt_init($conn);
+
+        if (!mysqli_stmt_prepare($stmt, $sql)) {
+            die("SQL error: " . mysqli_error($conn));
+        }
+
+        mysqli_stmt_bind_param($stmt, "i", $id);
+
+        if (mysqli_stmt_execute($stmt)) {
+            $success = "Ο λογαριασμός διαγράφηκε!";
+        } else {
+            $error = "Delete failed: " . mysqli_error($conn);
+        }
+
+        mysqli_stmt_close($stmt);
+    }
+
+    mysqli_close($conn);
+}
+?>
+
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="sidenav.css" />
+    <link rel="stylesheet" href="theme.css" />
+    <link rel="stylesheet" href="buttons.css" />
+    <link rel="stylesheet" href="accordion.css" />
+    <link rel="stylesheet" href="register.css" />
+    <script defer src="theme.js"></script>
+    <script defer src="accordion.js"></script>
+
+  </head>
+  <body>
+
+    <div class="mode-tog"></div>
+
+    <div class="dark-mode-container">
+      <div class="dark-mode"></div>
+    </div>
+    
+    <nav class="sidenav">
+      <a href="index.html" class="logo-link">
+        <img class="logo" src="Images/logo.png" alt="logo" />
+      </a>
+    </nav>
+
+    <section class="wrapper-main">
+
+        <form class="register-form" method="POST" action="">
+          <label>First Name:</label>
+          <input type="text" name="firstname" required>
+
+          <label>Last Name:</label>
+          <input type="text" name="lastname" required>
+
+          <label>Username:</label>
+          <input type="text" name="username" required>
+
+          <label>Email:</label>
+          <input type="email" name="email" required>
+
+          <label>Password:</label>
+          <input type="password" name="password" required>
+
+          <button id="submit-button" class="buttons" type="submit">ΕΝΗΜΕΡΩΣΗ</button>
+          <button id="submit-button" class="buttons" type="submit" name="delete" formnovalidate>ΔΙΑΓΡΑΦΗ</button>
+            
+          <p>
+            <?php if (!empty($success)) : ?>
+              <span style="color:green;"><?php echo $success; ?></span>
+            <?php elseif (!empty($error)) : ?>
+              <span style="color:red;"><?php echo $error; ?></span>
+            <?php else : ?>
+              ㅤ 
+            <?php endif; ?>
+          </p>
+
+        </form>
+    </section>
+
+
+  </body>
+</html>
+</file>
+
+<file path="README.md">
+# TexnologiesDiadiktiou
+Εργασία για το μάθημα "Τεχνολογίες Διαδικτύου 2025"
+</file>
+
+<file path="register.css">
+.wrapper-main { 
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  max-width: 100%;
+  margin-left: 220px;
+}
+
+.register-form {
+    width: 500px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3rem;
+    padding: 3rem;
+}
+
+label {
+    margin-bottom: -30px;
+    color: rgba(0, 0, 0, 0.502);
+    font-weight: 500;
+    font-size: 20px;
+    transition: color 1s;
+}
+
+body.dark label {
+  color: rgba(255, 255, 255, 0.503);
+  transition: color 1s;
+}
+
+input {
+    font-size: 16px;
+    width: 100%;
+    background-color: rgba(240, 248, 255, 0);
+    border: 0px;
+    border-bottom: 1px solid;
+    transition: color 1s, border-bottom-color 1s;
+}
+
+body.dark input {
+    color: white;
+    border-bottom: 1px solid rgb(255, 255, 255);
+    transition: color 1s, border-bottom-color 1s;
+}
+
+input:focus {
+    outline: none;
+    border-bottom: 2px solid;
+}
+
+body.dark input:focus {
+    border-bottom: 2px solid white;
+}
+
+#submit-button {
+    margin-left: 5%;
+    scale: 1.3;
+}
+</file>
+
+<file path="register.php">
+<?php
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    $first_name = $_POST["firstname"];
+    $last_name = $_POST["lastname"];
+    $username= $_POST["username"];
+    $email = $_POST["email"];
+    $password = $_POST["password"];
+
+    $host = "localhost";
+    $port = 8889;
+    $dbname = "texnologies_diadiktiou_db";
+    $db_username = "root";
+    $db_password = "root";
+    $socket = '/Applications/MAMP/tmp/mysql/mysql.sock';
+
+    $conn = mysqli_connect($host, 
+                           $db_username, 
+                           $db_password, 
+                           $dbname, 
+                           $port, 
+                           $socket);
+
+    if (mysqli_connect_errno()) {
+        die("Connection error: " . mysqli_connect_error());
+    }
+
+    $sql = "INSERT INTO user_data (first_name, last_name, username, email, password)
+            VALUES (?, ?, ?, ?, ?)";
+
+    $stmt = mysqli_stmt_init($conn);
+
+    if (!mysqli_stmt_prepare($stmt, $sql)) {
+        die(mysqli_error($conn));
+    }
+
+    mysqli_stmt_bind_param($stmt, "sssss",
+                           $first_name,
+                           $last_name,
+                           $username,
+                           $email,
+                           $password);
+
+    mysqli_stmt_execute($stmt);
+}
+?>
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="sidenav.css" />
+    <link rel="stylesheet" href="theme.css" />
+    <link rel="stylesheet" href="buttons.css" />
+    <link rel="stylesheet" href="register.css" />
+    <script defer src="theme.js"></script>
+    <script src="demo_defer.js" defer></script>
+</head>
+
+<body>
+
+    <div class="mode-tog"></div>
+
+    <div class="dark-mode-container">
+      <div class="dark-mode"></div>
+    </div>
+    
+    <nav class="sidenav">
+      <a href="index.html" class="logo-link">
+        <img class="logo" src="Images/logo.png" alt="logo" />
+      </a>
+    </nav>
+
+    <section class="wrapper-main">
+        <form class="register-form" method="post">
+            <label for="firstname">ΟΝΟΜΑ</label>
+            <input type="text" id="firstname" name="firstname" placeholder="First name">
+            <label for="lastname">ΕΠΩΝΥΝΟ</label>
+            <input type="text" id="lastname" name="lastname" placeholder="Last name">
+            <label for="username">ΟΝΟΜΑ ΧΡΗΣΤΗ</label>
+            <input type="text" id="username" name="username" placeholder="Username">
+            <label for="email">EMAIL</label>
+            <input type="email" id="email" name="email" placeholder="Email">
+            <label for="password">ΚΩΔΙΚΟΣ</label>
+            <input type="password" id="password" name="password" placeholder="Password">
+            <button id="submit-button" class="buttons" type="submit" name="submit">ΥΠΟΒΟΛΗ</button>
+
+            <p>
+            <?php if (!empty($success)) : ?>
+              <span style="color:green;">Επιτυχής Εγγραφή!</span>
+            <?php elseif (!empty($error)) : ?>
+              <span style="color:red;"><?php echo $error; ?></span>
+            <?php else : ?>
+              ㅤ 
+            <?php endif; ?>
+          </p>
+        </form>
+    </section>
+    
+</body>
+
+
+</html>
+</file>
+
+<file path="sidenav.css">
+.sidenav {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  height: 100%;
+  width: 220px;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  background-color: #000000;
+  border-right: 1px solid;
+  overflow-x: hidden;
+  z-index: 1;
+}
+
+.logo-link {
+    width: 70%;
+}
+
+.logo {
+  margin-top: 10px;
+  scale: 1;
+  width: 100%;
+}
+</file>
+
+<file path="src/controller.php">
+<?php
+class Controller
+{
+    private $requestMethod;
+
+    private $connection;
+
+    function __construct($conn) {
+        $this->connection = $conn;
+    }
+
+    public function login()
+    {
+        $username = $this->validate("username", true);
+        $password = $this->validate("password", true);
+        $remember_me = $this->validate("remember-me");
+
+        $stmt = $this->connection->prepare("SELECT * FROM user_data WHERE username = ? AND BINARY(password) = ?");
+        if (!$stmt) {
+            throw new Exception($this->connection->error);
+        }
+        $stmt->bind_param("ss", $username, $password);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        if ($row = $result->fetch_assoc()) {
+
+            $_SESSION['user_id'] = $row['id'];
+            $_SESSION['username'] = $row['username'];
+
+            if ($remember_me) {
+                setcookie("username", $row['username'], time() + (86400 * 30), "/");
+            }
+            
+            return ['redirect' => 'main.html'];
+            
+        } else {
+            throw new Exception("User not found.");
+        }
+    }
+
+    function register() {
+        $first_name = $this->validate("firstname", true);
+        $last_name = $this->validate("lastname", true);
+        $username= $this->validate("username", true);
+        $email = $this->validate("email", true);
+        $password = $this->validate("password", true);
+
+        $sql = "INSERT INTO user_data (first_name, last_name, username, email, password)
+                VALUES (?, ?, ?, ?, ?)";
+
+        $stmt = mysqli_stmt_init($this->connection);
+
+        if (!mysqli_stmt_prepare($stmt, $sql)) {
+            throw new Exception(mysqli_error($this->connection));
+        }
+
+        mysqli_stmt_bind_param($stmt, "sssss",
+                            $first_name,
+                            $last_name,
+                            $username,
+                            $email,
+                            $password);
+
+        if (!mysqli_stmt_execute($stmt)) {
+            throw new Exception($this->connection->error);
+        }
+ 
+        return ['closeModal' => 'true'];
+    }
+
+    public function getUser() {
+        if (!isset($_SESSION['user_id'])) {
+            throw new Exception("Not logged in.");
+        }
+
+        $id = $_SESSION['user_id'];
+        $stmt = $this->connection->prepare("SELECT first_name, last_name, username, email FROM user_data WHERE id = ?");
+        $stmt->bind_param("i", $id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        if ($row = $result->fetch_assoc()) {
+            return $row;
+        } else {
+            throw new Exception("User not found.");
+        }
+    }
+
+    public function edit() {
+        if (!isset($_SESSION['user_id'])) {
+            throw new Exception("Not logged in.");
+        }
+
+        $id = $_SESSION['user_id'];
+        $first_name = $this->validate("firstname", true);
+        $last_name  = $this->validate("lastname", true);
+        $username   = $this->validate("username", true);
+        $email      = $this->validate("email", true);
+        $password   = $this->validate("password", true);
+
+        $sql = "UPDATE user_data 
+                SET first_name = ?, last_name = ?, username = ?, email = ?, password = ?
+                WHERE id = ?";
+
+        $stmt = $this->connection->prepare($sql);
+        $stmt->bind_param("sssssi", $first_name, $last_name, $username, $email, $password, $id);
+
+        if (!$stmt->execute()) {
+            throw new Exception($this->connection->error);
+        }
+
+        return ["closeModal" => true];
+    }
+    
+
+    function validate($input, $mandatory=false) {
+        if ($mandatory == true && empty($_POST[$input])) {
+            throw new Exception('Όλα τα πεδία είναι υποχρεωτικά!');
+        }
+
+        return htmlspecialchars(stripcslashes($_POST[$input] ?? '')); // https://www.php.net/manual/en/function.stripslashes.php
+    }
+
+    public function getRequestMethod() {
+        return $this->requestMethod;
+    }
+
+    public function setRequestMethod(string $methodName) {
+        if ($methodName === '') {
+            throw new Exception('RequestMethod cannot be empty.');
+        }
+
+        $this->requestMethod = $methodName;
+    }
+
+    public function render($file){
+        if (file_exists($file)) {
+            ob_start();
+            echo include($file);
+            ob_flush();
+            ob_end_clean();
+        }
+    }
+}
+</file>
+
+<file path="src/database.php">
+<?php 
+    $host = "localhost";
+    $port = 8889;
+    $dbname = "texnologies_diadiktiou_db";
+    $db_username = "root";
+    $db_password = "root";
+    $socket = '/Applications/MAMP/tmp/mysql/mysql.sock';
+
+    $conn = mysqli_connect($host, 
+                        $db_username, 
+                        $db_password, 
+                        $dbname, 
+                        $port, 
+                        $socket);
+
+    if (mysqli_connect_errno()) {
+        die("Connection error: " . mysqli_connect_error());
+    }
+</file>
+
+<file path="src/googleauth.php">
+<?php
+
+class GoogleAuth
+{
+    private Google\Client $client;
+    private Google\Service\YouTube $youtubeService;
+
+    function __construct()
+    {
+        $this->client = new Google\Client();
+        $this->client->setApplicationName("Client_Library_Examples");
+        $this->client->setDeveloperKey("YOUR_APP_KEY");
+        $this->youtubeService = new Google\Service\Youtube($this->client);
+    }
+
+    function auth()
+    {
+        session_start();
+        $this->client->setAuthConfig('client_secrets.json');
+        $this->client->addScope(Google\Service\Youtube::YOUTUBE_READONLY);
+
+        if (isset($_SESSION['access_token']) && $_SESSION['access_token']) {
+            $this->downloadFeed();
+        } else {
+            $redirect_uri = 'http://' . $_SERVER['HTTP_HOST'] . '/oauth2callback.php';
+            header('Location: ' . filter_var($redirect_uri, FILTER_SANITIZE_URL));
+        }
+        session_write_close();
+    }
+
+    function authCallback($code)
+    {
+        session_start();
+        if (!isset($code)) {
+            $auth_url = $this->client->createAuthUrl();
+            header('Location: ' . filter_var($auth_url, FILTER_SANITIZE_URL));
+        } else {
+            $this->client->authenticate($code);
+            $_SESSION['access_token'] = $this->client->getAccessToken();
+            $redirect_uri = 'http://' . $_SERVER['HTTP_HOST'] . '/';
+            header('Location: ' . filter_var($redirect_uri, FILTER_SANITIZE_URL));
+        }
+        session_write_close();
+    }
+
+    function downloadFeed()
+    {
+        
+    }
+}
+</file>
+
+<file path="test.css">
+/* Modal background */
+.modal {
+  display: none; /* hidden by default */
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.6);
+  justify-content: center;
+  align-items: center;
+}
+
+/* Show modal when active */
+.modal.active {
+  display: flex;
+}
+
+/* Modal content */
+.modal-content {
+  color: black;
+  background: #fff;
+  padding: 2rem;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-left: 220px;
+  max-height: 600px;
+  height: 50;
+  max-width: 400px;
+  width: 100%;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+  position: relative;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {opacity: 0; transform: translateY(-20px);}
+  to {opacity: 1; transform: translateY(0);}
+}
+
+/* Form inside modal */
+.register-form {
+  display: flex;
+  flex-direction: column;
+  width: 80%;
+  gap: 1rem;
+}
+
+/* Input labels and fields */
+.label-input {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  font-weight: 500;
+}
+
+input[type="text"],
+input[type="password"],
+input[type="email"] {
+  all: unset;
+  padding: 10px;
+  font-size: 16px;
+  outline: 1px solid black;
+  border-radius: 5px;
+}
+
+input[type="text"]:focus,
+input[type="password"]:focus,
+input[type="email"]:focus {
+  outline: 2px solid black;
+}
+
+/* Auth buttons inside modal */
+.auth-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  background-color: red;
+  width: 100%;
+  padding: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: 500;
+  text-align: center;
+}
+
+.auth-button:hover {
+  background-color: rgb(195, 0, 0);
+}
+
+/* Checkbox styling */
+input[type="checkbox"] {
+  accent-color: red;
+}
+
+/* Forgot password link */
+#login-a {
+  align-self: center;
+  text-align: center; 
+  margin-top: 10px;
+}
+
+/* Close button */
+.close {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+/* Optional: responsive adjustment */
+@media (max-width: 500px) {
+  .modal-content {
+    margin-left: 0;
+    width: 90%;
+    height: auto;
+    padding: 1.5rem;
+  }
+}
+</file>
+
+<file path="test.html">
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Modal Example</title>
+        <link rel="stylesheet" href="test.css">
+        <script src="test.js"></script>
+    </head>
+    <body>
+
+  <div class="sign-container">
+    <div class="sign-buttons">
+      <div data-type="register" class="auth-button-modal buttons"><span>ΕΓΓΡΑΦΗ</span></div>
+      <div data-type="login" class="auth-button-modal buttons"><span>ΕΙΣΟΔΟΣ</span></div>
+    </div>
+
+    <div class="help">
+      Χρειάζεσαι βοήθεια; Κάνε κλικ <a href="help.html">Εδώ!</a>
+    </div>
+  </div>
+
+  <!-- Login Modal -->
+  <div id="loginModal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <form class="register-form" method="post">
+        <div class="label-input">
+          <label for="username">ΟΝΟΜΑ ΧΡΗΣΤΗ</label>
+          <input type="text" name="username" required>
+        </div>
+        <div class="label-input">
+          <label for="password">ΚΩΔΙΚΟΣ</label>
+          <input type="password" name="password" required>
+        </div>
+        <div>
+          <input type="checkbox" id="remember-me" name="remember-me" value="0">
+          <label for="remember-me">Να με θυμάσαι</label>
+        </div>
+        <div class="buttons auth-button"><span>ΕΙΣΟΔΟΣ</span></div>
+        <div id="login-a">
+          Ξέχασες τον <a href="#">κωδικό</a> σου;
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Register Modal -->
+  <div id="registerModal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <form class="register-form" method="post">
+        <div class="label-input">
+          <label for="new-username">ΟΝΟΜΑ ΧΡΗΣΤΗ</label>
+          <input type="text" name="new-username" required>
+        </div>
+        <div class="label-input">
+          <label for="new-email">EMAIL</label>
+          <input type="email" name="new-email" required>
+        </div>
+        <div class="label-input">
+          <label for="new-password">ΚΩΔΙΚΟΣ</label>
+          <input type="password" name="new-password" required>
+        </div>
+        <div class="buttons auth-button"><span>ΕΓΓΡΑΦΗ</span></div>
+      </form>
+    </div>
+  </div>
+
+</body>
+</html>
+</file>
+
+<file path="test.js">
+document.addEventListener("DOMContentLoaded", () => {
+  const authBtns = document.querySelectorAll(".auth-button-modal");
+  const closeBtns = document.querySelectorAll(".modal .close");
+
+  // Open modal
+  authBtns.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const type = btn.dataset.type;
+      const modal =
+        type === "login"
+          ? document.getElementById("loginModal")
+          : document.getElementById("registerModal");
+
+      if (modal) modal.classList.add("active");
+    });
+  });
+
+  // Close modal via "×"
+  closeBtns.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const modal = btn.closest(".modal");
+      if (modal) modal.classList.remove("active");
+    });
+  });
+
+  // Close modal by clicking outside modal content
+  window.addEventListener("click", (e) => {
+    if (e.target.classList.contains("modal")) {
+      e.target.classList.remove("active");
+    }
+  });
+});
+</file>
+
+<file path="theme.css">
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Roboto', sans-serif;
+}
+
+body, html {
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    background-color: white;
+    color: black;
+    transition: background-color 2s, color 1s;
+}
+
+body.dark {
+    background-color: rgb(0, 0, 0);
+    color: rgb(255, 255, 255);
+    z-index: 0;
+}
+
+.try-me {
+    position: absolute;
+    right: 105px;
+    bottom: 110px;
+    font-weight: 900;
+}
+
+.try-me-arrow {
+    position: absolute;
+    right: 48px;
+    bottom: 60px;
+    font-size: 50px;
+}
+
+.mode-tog {
+    background-color: black;
+    position: absolute;
+    right: 50px;
+    bottom: 40px;
+    cursor: pointer;
+    width: 20px;
+    height: 20px;
+    z-index: 3;
+    transition: 1000ms;
+    border-radius: 50%;
+
+    animation: pulse-scale 2s infinite ease-in-out;
+}
+
+.mode-tog.active {
+    background-color: white;
+}
+
+@keyframes pulse-scale {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.5);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.dark-mode-container {
+    position: fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    right: 50px;
+    bottom: 40px;
+    width: 20px;
+    height: 20px;
+}
+
+.dark-mode {
+    position: relative;
+    transform: scale(0);
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: 250vw;
+    height: 250vw;
+    border-radius: 50%;
+    background-color: #000000;
+    transition: 1000ms ease-in-out;
+    display: flex;
+    flex: 0 0 auto;
+    z-index: 0;
+}
+
+.dark-mode.active {
+    transform: scale(1);
+}
+
+.dark-mode.no-transition {
+    transition: none !important;
+}
+
+h1 {
+    position: relative;
+    z-index: 1; 
+}
+
+.accordion-container, .wrapper-main {
+    position: relative;
+    z-index: 1; 
+}
+
+h1 {
+    color: white;
+    mix-blend-mode: difference;
+    position: absolute;
+    left: 35%;
+    top: 40%;
+}
+
+@media (max-width: 600px) {
+    .dark-mode {
+        width: 250vh;
+        height: 250vh;
+    }
+}
+</file>
+
+<file path="theme.js">
+let modeToggle = document.querySelector('.mode-tog');
+let darkMode = document.querySelector('.dark-mode');
+
+let savedMode = localStorage.getItem('mode');
+if (savedMode === 'dark') {
+    darkMode.classList.add('no-transition');
+    darkMode.classList.add('active');
+    modeToggle.classList.add('active');
+    document.body.classList.add('dark');
+
+    setTimeout(() => {
+        darkMode.classList.remove('no-transition');
+    }, 0);
+}
+
+modeToggle.addEventListener('click', () => {
+    darkMode.classList.toggle('active');
+    modeToggle.classList.toggle('active');
+    document.body.classList.toggle('dark');
+
+    if (darkMode.classList.contains('active')) {
+        localStorage.setItem('mode', 'dark');
+    } else {
+        localStorage.setItem('mode', 'light');
+    }
+});
+</file>
+
+</files>

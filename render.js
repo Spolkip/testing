@@ -44,6 +44,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Handles fetching user data from the server and updating the DOM
     function fetchAndDisplayUserData() {
+        // Fetch user details
         fetch("index.php?action=getUser")
             .then(response => {
                 if (!response.ok) {
@@ -60,6 +61,39 @@ document.addEventListener("DOMContentLoaded", () => {
             })
             .catch(err => {
                 console.error("Error fetching user data:", err);
+            });
+
+        // Fetch user playlists
+        fetch("index.php?action=getMyPlaylists")
+            .then(response => response.json())
+            .then(playlists => {
+                const playlistsGrid = document.getElementById("my-playlists-grid");
+                if (!playlistsGrid) return;
+
+                playlistsGrid.innerHTML = ''; // Clear placeholder or old content
+
+                if (playlists.length === 0) {
+                    playlistsGrid.innerHTML = '<p>You haven\'t created any playlists yet. Go to "Οι Λίστες μου" to create one!</p>';
+                } else {
+                    playlists.forEach(playlist => {
+                        const playlistCard = document.createElement('a');
+                        playlistCard.className = 'playlist-card';
+                        playlistCard.href = `view_playlist.php?id=${playlist.id}`;
+                        
+                        const playlistName = document.createElement('h3');
+                        playlistName.textContent = playlist.name;
+                        
+                        playlistCard.appendChild(playlistName);
+                        playlistsGrid.appendChild(playlistCard);
+                    });
+                }
+            })
+            .catch(err => {
+                console.error("Error fetching playlists:", err);
+                const playlistsGrid = document.getElementById("my-playlists-grid");
+                if(playlistsGrid) {
+                    playlistsGrid.innerHTML = '<p>Could not load playlists.</p>';
+                }
             });
     }
 

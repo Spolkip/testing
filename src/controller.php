@@ -151,7 +151,7 @@ class Controller
         ];
     }
     
-    // Δημιουργεί μια νέα λίστα αναπαραγωγής για τον συνδεδεμένο χρήστη.
+    // Creates a new playlist for the logged-in user.
     public function createPlaylist() {
         if (!isset($_SESSION['user_id'])) {
             throw new Exception("Δεν είστε συνδεδεμένος.");
@@ -169,7 +169,7 @@ class Controller
         return ['success' => true, 'message' => 'Η λίστα δημιουργήθηκε με επιτυχία.'];
     }
 
-    // Προσθέτει ένα βίντεο από το YouTube σε μια υπάρχουσα λίστα.
+    // Adds a YouTube video to an existing playlist.
     public function addVideoToPlaylist() {
         if (!isset($_SESSION['user_id'])) {
             throw new Exception("Δεν είστε συνδεδεμένος.");
@@ -179,7 +179,7 @@ class Controller
         $video_title = $this->validate("video_title", true);
         $video_url = $this->validate("video_url", true);
 
-        // Απομονώνει το ID του βίντεο από το URL του YouTube.
+        // Extracts the video ID from the YouTube URL.
         preg_match("/^(?:http(?:s)?:\/\/)?(?:www\.)?(?:m\.)?(?:youtu\.be\/|youtube\.com\/(?:(?:watch)?\?(?:.*&)?v(?:i)?=|(?:embed|v|vi|user)\/))([^\?&\"'>]+)/", $video_url, $matches);
         $video_id = $matches[1] ?? null;
 
@@ -198,7 +198,7 @@ class Controller
         return ['success' => true, 'message' => 'Το βίντεο προστέθηκε με επιτυχία.'];
     }
 
-    // Επιστρέφει όλες τις λίστες που έχει δημιουργήσει ο τρέχων χρήστης.
+    // Retrieves all playlists created by the current user.
     public function getMyPlaylists() {
         if (!isset($_SESSION['user_id'])) {
             throw new Exception("Δεν είστε συνδεδεμένος.");
@@ -214,8 +214,68 @@ class Controller
         }
         return $playlists;
     }
+    
+    // Edits the name of a specific playlist.
+    public function editPlaylist() {
+        if (!isset($_SESSION['user_id'])) {
+            throw new Exception("Not logged in.");
+        }
+        $user_id = $_SESSION['user_id'];
+        $playlist_id = $this->validate("playlist_id", true);
+        $new_name = $this->validate("new_playlist_name", true);
 
-    // Επιστρέφει λίστες από το feed του χρήστη (δικές του και όσων ακολουθεί).
+        $sql = "UPDATE playlists SET name = ? WHERE id = ? AND user_id = ?";
+        $stmt = $this->connection->prepare($sql);
+        if (!$stmt) { throw new Exception($this->connection->error); }
+        $stmt->bind_param("sii", $new_name, $playlist_id, $user_id);
+        
+        if (!$stmt->execute()) {
+            throw new Exception("Database update failed: " . $this->connection->error);
+        }
+        
+        if ($stmt->affected_rows === 0) {
+            throw new Exception("Playlist not found or you don't have permission to edit it.");
+        }
+
+        return ['success' => true, 'message' => 'Playlist updated successfully.'];
+    }
+
+    // Deletes a playlist and all its associated videos.
+    public function deletePlaylist() {
+        if (!isset($_SESSION['user_id'])) {
+            throw new Exception("Not logged in.");
+        }
+        $user_id = $_SESSION['user_id'];
+        $playlist_id = $this->validate("playlist_id", true);
+
+        // First, delete associated videos from playlist_videos
+        $sql_videos = "DELETE FROM playlist_videos WHERE playlist_id = ? AND playlist_id IN (SELECT id FROM playlists WHERE user_id = ?)";
+        $stmt_videos = $this->connection->prepare($sql_videos);
+        if (!$stmt_videos) { throw new Exception($this->connection->error); }
+        $stmt_videos->bind_param("ii", $playlist_id, $user_id);
+        if (!$stmt_videos->execute()) {
+            throw new Exception("Failed to delete videos from playlist: " . $this->connection->error);
+        }
+
+        // Then, delete the playlist itself
+        $sql_playlist = "DELETE FROM playlists WHERE id = ? AND user_id = ?";
+        $stmt_playlist = $this->connection->prepare($sql_playlist);
+        if (!$stmt_playlist) { throw new Exception($this->connection->error); }
+        $stmt_playlist->bind_param("ii", $playlist_id, $user_id);
+
+        if (!$stmt_playlist->execute()) {
+            throw new Exception("Failed to delete playlist: " . $this->connection->error);
+        }
+        
+        if ($stmt_playlist->affected_rows === 0) {
+            throw new Exception("Playlist not found or you don't have permission to delete it.");
+        }
+
+        return ['success' => true, 'message' => 'Playlist deleted successfully.'];
+    }
+
+
+    // Retrieves playlists for the user's feed (their own and from users they follow).
     public function getFeedPlaylists() {
         if (!isset($_SESSION['user_id'])) {
             throw new Exception("Δεν είστε συνδεδεμένος.");
@@ -242,7 +302,7 @@ class Controller
         return $playlists;
     }
 
-    // Επιστρέφει τις λεπτομέρειες και τα βίντεο μιας συγκεκριμένης λίστας.
+    // Retrieves the details and videos for a specific playlist.
     public function getPlaylistDetails() {
         if (!isset($_SESSION['user_id'])) {
             throw new Exception("Δεν είστε συνδεδεμένος.");
@@ -282,7 +342,7 @@ class Controller
         return ['info' => $playlist_info, 'videos' => $videos];
     }
     
-    // Επιστρέφει όλες τις λίστες από όλους τους χρήστες στη βάση δεδομένων.
+    // Retrieves all playlists from all users in the database.
     public function getAllPlaylists() {
         if (!isset($_SESSION['user_id'])) {
             throw new Exception("Δεν είστε συνδεδεμένος.");
@@ -305,7 +365,7 @@ class Controller
         return $playlists;
     }
     
-    // Χειρίζεται την αναζήτηση λιστών με βάση διάφορα κριτήρια και σελιδοποίηση.
+    // Handles searching for playlists based on various criteria and pagination.
     public function searchPlaylists() {
         if (!isset($_SESSION['user_id'])) {
             throw new Exception("Δεν είστε συνδεδεμένος.");

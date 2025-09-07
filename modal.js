@@ -4,47 +4,30 @@ document.addEventListener("DOMContentLoaded", () => {
   const rememberMeButton = document.getElementById('remember-me');
   const submitButtons = document.querySelectorAll(".modal .auth-button");
   let isSubmitting = false;
-  let modal;
-  let buttonType;
 
-  // Open modal
-  Array.prototype.forEach.call(authBtns, function(button) {
+  // Open modal for login/register
+  authBtns.forEach(button => {
     button.addEventListener("click", () => {
-      buttonType = button.getAttribute('data-type');
-      if (buttonType == 'login') {
+      const buttonType = button.getAttribute('data-type');
+      let modal;
+      if (buttonType === 'login') {
         modal = document.getElementById('loginModal');
-      } else if (buttonType == 'register') {
+      } else if (buttonType === 'register') {
         modal = document.getElementById('registerModal');
-      } else if (buttonType == 'edit') {
-        modal = document.getElementById('editModal');
-        fetch("index.php?action=getUser")
-        .then(response => response.json())
-        .then(data => {
-          const form = modal.querySelector('form');
-          form.firstname.value = data.first_name;
-          form.lastname.value = data.last_name;
-          form.username.value = data.username;
-          form.email.value = data.email;
-          form.password.value = ""; // leave empty for security
-        })
-        .catch(err => {
-          console.error("Error fetching user data", err);
-        });
       }
 
-      // Reset form and error message
-      const form = modal.querySelector('form');
-      form.reset();
-      const messageBox = form.querySelector('.error-messagebox');
-      if (messageBox) messageBox.innerHTML = "&nbsp;";
-
-      // Reset input borders
-      form.querySelectorAll("input").forEach(i => i.classList.remove("error"));
-
-      modal.style.display = "flex";
+      if (modal) {
+        const form = modal.querySelector('form');
+        if (form) form.reset();
+        const messageBox = modal.querySelector('.error-messagebox');
+        if (messageBox) messageBox.innerHTML = "&nbsp;";
+        modal.querySelectorAll("input").forEach(i => i.classList.remove("error"));
+        modal.style.display = "flex";
+      }
     });
   });
 
+  // Close modals
   closeBtns.forEach(btn => {
     btn.addEventListener("click", () => {
       btn.closest(".modal").style.display = "none";
@@ -52,65 +35,70 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   window.addEventListener("click", (event) => {
-    if (modal && event.target === modal) {
-      modal.style.display = "none";
+    // This will only close login/register modals. Profile modals are handled by render.js
+    if (event.target.matches('#loginModal, #registerModal')) {
+      event.target.style.display = "none";
     }
   });
 
+  // Remember me checkbox
   if (rememberMeButton) {
     rememberMeButton.addEventListener('click', function() {
       this.value = this.checked ? 1 : 0;
     });
   }
 
-  if (submitButtons) {
-    Array.prototype.forEach.call(submitButtons, function(button) {
-      button.addEventListener('click', async () => {
-        if (isSubmitting) return;
-        isSubmitting = true;
+  // Handle form submission for login/register
+  submitButtons.forEach(button => {
+    button.addEventListener('click', async () => {
+      if (isSubmitting) return;
 
-        const form = document.getElementById(buttonType + 'Form');
-        const messageBox = form.querySelector('.error-messagebox');
+      const form = button.closest('form');
+      const modal = button.closest('.modal');
+      let action = '';
 
-        if (messageBox) messageBox.innerHTML = "&nbsp;";
-        form.querySelectorAll("input").forEach(i => i.classList.remove("error"));
+      // Determine action based on which modal we are in
+      if (modal.id === 'loginModal') action = 'login';
+      if (modal.id === 'registerModal') action = 'register';
+      
+      // If we are not in a login or register modal, do nothing.
+      if (!action) return;
 
-        const data = new FormData(form);
-        data.append("action", buttonType);
+      isSubmitting = true;
+      const messageBox = form.querySelector('.error-messagebox');
+      if (messageBox) messageBox.innerHTML = "&nbsp;";
+      form.querySelectorAll("input").forEach(i => i.classList.remove("error"));
 
-        try {
-          const response = await fetch("index.php", { method: "POST", body: data });
-          const result = await response.json();
+      const data = new FormData(form);
+      data.append("action", action);
 
-          if (!response.ok) {
-            throw new Error(result.error || "Κάτι πήγε στραβά!");
-          }
+      try {
+        const response = await fetch("index.php", { method: "POST", body: data });
+        const result = await response.json();
 
-          const messageBox = form.querySelector('.error-messagebox');
-
-          if (buttonType === "register") {
-            // Εμφάνιση μηνύματος επιτυχίας για εγγραφή
-            if (messageBox) {
-              messageBox.style.color = "green";  // <-- change text to green
-              messageBox.innerHTML = "Επιτυχής εγγραφή! Μπορείς τώρα να συνδεθείς.";
-            }
-          } else if (result.redirect) {
-            window.location.href = result.redirect;
-          } else if (result.closeModal) {
-            form.closest(".modal").style.display = "none";
-            form.reset();
-          }
-        } catch (error) {
-          // Highlight inputs and show error
-          form.querySelectorAll("input[required]").forEach(i => i.classList.add("error"));
-          if (messageBox) {
-            messageBox.style.color = "red"; // ensure error is red
-            messageBox.innerHTML = error.message;
-          }
-        } finally {
-          isSubmitting = false;
+        if (!response.ok) {
+          throw new Error(result.error || "Κάτι πήγε στραβά!");
         }
-      });
+
+        if (action === "register") {
+          if (messageBox) {
+            messageBox.style.color = "green";
+            messageBox.innerHTML = "Επιτυχής εγγραφή! Μπορείς τώρα να συνδεθείς.";
+          }
+        } else if (result.redirect) {
+          window.location.href = result.redirect;
+        } else if (result.closeModal) {
+          modal.style.display = "none";
+        }
+      } catch (error) {
+        form.querySelectorAll("input[required]").forEach(i => i.classList.add("error"));
+        if (messageBox) {
+          messageBox.style.color = "red";
+          messageBox.innerHTML = error.message;
+        }
+      } finally {
+        isSubmitting = false;
+      }
     });
-  }
+  });
 });

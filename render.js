@@ -3,6 +3,31 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const profileIconLink = document.querySelector('a.profile-icon');
     const contentContainer = document.getElementById('content');
+    const logoutButton = document.getElementById('logout-btn');
+
+    // Listener for Profile Icon click
+    if (profileIconLink) {
+        profileIconLink.addEventListener('click', (event) => {
+            event.preventDefault();
+            loadProfilePage();
+        });
+    }
+
+    // Listener for Logout Button click
+    if (logoutButton) {
+        logoutButton.addEventListener('click', async (event) => {
+            event.preventDefault();
+            try {
+                const response = await fetch("index.php?action=logout");
+                const result = await response.json();
+                if (result.redirect) {
+                    window.location.href = result.redirect;
+                }
+            } catch (error) {
+                console.error('Logout failed:', error);
+            }
+        });
+    }
 
     // Handles fetching and injecting the profile page content
     function loadProfilePage() {
@@ -21,17 +46,21 @@ document.addEventListener("DOMContentLoaded", () => {
                 const profileDocument = parser.parseFromString(html, 'text/html');
                 const profileMainContent = profileDocument.querySelector('main.profile-container');
                 const editModalContent = profileDocument.getElementById('editModal');
+                const deleteModalContent = profileDocument.getElementById('deleteModal');
                 
                 if (profileMainContent) {
-                    contentContainer.className = 'profile-container';
+                    contentContainer.className = 'profile-container'; // Keep class consistency
                     contentContainer.innerHTML = profileMainContent.innerHTML;
                     
-                    // If the edit modal isn't already in the main document, add it.
                     if (editModalContent && !document.getElementById('editModal')) {
                         document.body.appendChild(editModalContent);
                     }
+                     if (deleteModalContent && !document.getElementById('deleteModal')) {
+                        document.body.appendChild(deleteModalContent);
+                    }
 
                     fetchAndDisplayUserData();
+                    fetchAndDisplayUserPlaylists();
                     initializeProfileInteractivity(); // Set up listeners for the new content
                 } else {
                     console.error('<main class="profile-container"> not found in profile.html');
@@ -44,11 +73,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Handles fetching user data from the server and updating the DOM
     function fetchAndDisplayUserData() {
-        // Fetch user details
         fetch("index.php?action=getUser")
             .then(response => {
                 if (!response.ok) {
-                    window.location.href = 'index.html';
+                    if (response.status === 401 || response.status === 403) window.location.href = 'index.html';
                     throw new Error("User not logged in or session expired.");
                 }
                 return response.json();
@@ -62,31 +90,28 @@ document.addEventListener("DOMContentLoaded", () => {
             .catch(err => {
                 console.error("Error fetching user data:", err);
             });
+    }
 
-        // Fetch user playlists
+    function fetchAndDisplayUserPlaylists() {
         fetch("index.php?action=getMyPlaylists")
             .then(response => response.json())
             .then(playlists => {
                 const playlistsGrid = document.getElementById("my-playlists-grid");
                 if (!playlistsGrid) return;
 
-                playlistsGrid.innerHTML = ''; // Clear placeholder or old content
-
                 if (playlists.length === 0) {
-                    playlistsGrid.innerHTML = '<p>You haven\'t created any playlists yet. Go to "Οι Λίστες μου" to create one!</p>';
-                } else {
-                    playlists.forEach(playlist => {
-                        const playlistCard = document.createElement('a');
-                        playlistCard.className = 'playlist-card';
-                        playlistCard.href = `view_playlist.php?id=${playlist.id}`;
-                        
-                        const playlistName = document.createElement('h3');
-                        playlistName.textContent = playlist.name;
-                        
-                        playlistCard.appendChild(playlistName);
-                        playlistsGrid.appendChild(playlistCard);
-                    });
+                    playlistsGrid.innerHTML = '<p>You have not created any playlists yet.</p>';
+                    return;
                 }
+
+                playlistsGrid.innerHTML = '';
+                playlists.forEach(playlist => {
+                    const card = document.createElement('a');
+                    card.href = `view_playlist.php?id=${playlist.id}`;
+                    card.className = 'playlist-card';
+                    card.innerHTML = `<h3>${playlist.name}</h3>`;
+                    playlistsGrid.appendChild(card);
+                });
             })
             .catch(err => {
                 console.error("Error fetching playlists:", err);
@@ -97,97 +122,137 @@ document.addEventListener("DOMContentLoaded", () => {
             });
     }
 
+
     // Sets up event listeners for the dynamically loaded profile page content
     function initializeProfileInteractivity() {
         const editButton = document.querySelector('.auth-button-modal[data-type="edit"]');
+        const deleteButton = document.getElementById('delete-profile-btn');
         const editModal = document.getElementById('editModal');
+        const deleteModal = document.getElementById('deleteModal');
         
-        if (!editButton || !editModal) {
-            console.error('Edit button or modal not found on the page.');
+        if (!editButton || !editModal || !deleteButton || !deleteModal) {
+            console.error('An interactive profile element was not found on the page.');
             return;
         }
 
-        const closeButton = editModal.querySelector('.close');
-        const form = editModal.querySelector('form');
-        const submitButton = form.querySelector('.auth-button');
-        const messageBox = form.querySelector('.error-messagebox');
+        // --- Edit Modal Logic ---
+        const closeEditButton = editModal.querySelector('.close');
+        const editForm = editModal.querySelector('form');
+        const submitEditButton = editForm.querySelector('.auth-button');
+        const editMessageBox = editForm.querySelector('.error-messagebox');
         let isSubmitting = false;
 
-        // Open the modal and pre-fill with user data
         editButton.addEventListener('click', () => {
             fetch("index.php?action=getUser")
                 .then(response => response.json())
                 .then(data => {
-                    form.firstname.value = data.first_name;
-                    form.lastname.value = data.last_name;
-                    form.username.value = data.username;
-                    form.email.value = data.email;
-                    form.password.value = ""; // leave empty for security
+                    editForm.firstname.value = data.first_name;
+                    editForm.lastname.value = data.last_name;
+                    editForm.username.value = data.username;
+                    editForm.email.value = data.email;
+                    editForm.password.value = "";
                 })
                 .catch(err => console.error("Error fetching user data", err));
             
-            messageBox.innerHTML = "&nbsp;"; // Clear previous messages
+            editMessageBox.innerHTML = "&nbsp;";
             editModal.style.display = 'flex';
         });
 
-        // Close the modal
-        closeButton.addEventListener('click', () => {
+        closeEditButton.addEventListener('click', () => {
             editModal.style.display = 'none';
         });
 
-        window.addEventListener("click", (event) => {
-            if (event.target === editModal) {
-                editModal.style.display = "none";
-            }
+        // --- Delete Modal Logic ---
+        const closeDeleteButton = deleteModal.querySelector('.close');
+        const deleteForm = deleteModal.querySelector('form');
+        const confirmDeleteButton = document.getElementById('confirm-delete-btn');
+        const deleteMessageBox = deleteForm.querySelector('.error-messagebox');
+        let isDeleting = false;
+
+        deleteButton.addEventListener('click', () => {
+            deleteForm.reset();
+            deleteMessageBox.innerHTML = "&nbsp;";
+            deleteModal.style.display = 'flex';
         });
 
-        // Handle form submission
-        submitButton.addEventListener('click', async () => {
+        closeDeleteButton.addEventListener('click', () => {
+            deleteModal.style.display = 'none';
+        });
+
+        window.addEventListener("click", (event) => {
+            if (event.target === editModal) editModal.style.display = "none";
+            if (event.target === deleteModal) deleteModal.style.display = "none";
+        });
+
+        // Handle Edit Form Submission
+        submitEditButton.addEventListener('click', async () => {
             if (isSubmitting) return;
             isSubmitting = true;
 
-            messageBox.innerHTML = "&nbsp;";
-            const data = new FormData(form);
+            editMessageBox.innerHTML = "&nbsp;";
+            const data = new FormData(editForm);
             data.append("action", "edit");
 
             try {
                 const response = await fetch("index.php", { method: "POST", body: data });
                 const result = await response.json();
 
-                if (!response.ok) {
-                    throw new Error(result.error || "An unknown error occurred.");
-                }
+                if (!response.ok) throw new Error(result.error || "An unknown error occurred.");
                 
-                // On success, update the profile details on the main page
                 if (result.success && result.userData) {
                     document.getElementById("first-name").textContent = result.userData.first_name;
                     document.getElementById("last-name").textContent = result.userData.last_name;
                     document.getElementById("username").textContent = result.userData.username;
                     document.getElementById("email").textContent = result.userData.email;
 
-                    // Show success message and close modal
-                    messageBox.style.color = "green";
-                    messageBox.innerHTML = "Profile updated successfully!";
+                    editMessageBox.style.color = "green";
+                    editMessageBox.innerHTML = "Profile updated successfully!";
                     setTimeout(() => {
                         editModal.style.display = "none";
-                        messageBox.style.color = "red"; // reset color for future errors
+                        editMessageBox.style.color = "red";
                     }, 2000);
                 }
 
             } catch (error) {
-                messageBox.style.color = "red";
-                messageBox.innerHTML = error.message;
+                editMessageBox.style.color = "red";
+                editMessageBox.innerHTML = error.message;
             } finally {
                 isSubmitting = false;
             }
         });
-    }
 
-    // Initial listener for the main profile icon
-    if (profileIconLink) {
-        profileIconLink.addEventListener('click', (event) => {
-            event.preventDefault();
-            loadProfilePage();
+        // Handle Delete Form Submission
+        confirmDeleteButton.addEventListener('click', async () => {
+            if (isDeleting) return;
+            isDeleting = true;
+            confirmDeleteButton.textContent = 'DELETING...';
+
+            deleteMessageBox.innerHTML = '&nbsp;';
+            const data = new FormData(deleteForm);
+            data.append('action', 'deleteUser');
+
+            try {
+                const response = await fetch('index.php', { method: 'POST', body: data });
+                const result = await response.json();
+
+                if (!response.ok) throw new Error(result.error || 'An unknown error occurred.');
+
+                if (result.redirect) {
+                    // A simple message before redirecting
+                    deleteMessageBox.style.color = 'green';
+                    deleteMessageBox.innerHTML = 'Account deleted successfully. Redirecting...';
+                    setTimeout(() => {
+                         window.location.href = result.redirect;
+                    }, 1500);
+                }
+            } catch (error) {
+                deleteMessageBox.style.color = 'red';
+                deleteMessageBox.innerHTML = error.message;
+            } finally {
+                isDeleting = false;
+                confirmDeleteButton.textContent = 'CONFIRM DELETION';
+            }
         });
     }
 });
+

@@ -10,7 +10,6 @@
     <link rel="stylesheet" href="modal.css" />
     <link rel="stylesheet" href="profile.css" />
     <script src="theme.js"></script>
-    <script src="modal.js"></script>
   </head>
   <body>
     
@@ -30,7 +29,10 @@
     <main class="profile-container">
         <header class="profile-header">
             <h1>User Profile</h1>
-            <div class="buttons auth-button-modal" data-type="edit"><span>Edit Profile</span></div>
+            <div class="profile-header-buttons">
+              <div class="buttons auth-button-modal" data-type="edit"><span>Edit Profile</span></div>
+              <div class="buttons" id="delete-profile-btn" style="background-color: #d9534f; border-color: #d43f3a;"><span>Delete Profile</span></div>
+            </div>
         </header>
 
         <section class="user-details">
@@ -82,8 +84,8 @@
             <input type="email" name="email" required>
           </div>
           <div class="label-input">
-            <label for="password">ΚΩΔΙΚΟΣ</label>
-            <input type="password" name="password" required>
+            <label for="password">ΝΕΟΣ ΚΩΔΙΚΟΣ (ΑΦΗΣΤΕ ΚΕΝΟ ΓΙΑ ΝΑ ΜΗΝ ΑΛΛΑΞΕΙ)</label>
+            <input type="password" name="password">
           </div>
           <div class="buttons auth-button"><span>ΑΝΑΝΕΩΣΗ</span></div>
           <div class="error-messagebox" style="color:red; font-weight:bold; text-align:center; margin-top:10px;">
@@ -93,5 +95,24 @@
       </div>
     </div>
 
+    <div id="deleteModal" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <form id="deleteForm" class="register-form" onsubmit="return false;">
+            <h2>Delete Account</h2>
+            <p style="text-align: center; margin-bottom: 1rem;">This action is permanent and cannot be undone. To confirm, please enter your password.</p>
+            <div class="label-input">
+                <label for="password_confirm">Password</label>
+                <input type="password" name="password_confirm" required>
+            </div>
+            <div class="buttons auth-button" id="confirm-delete-btn" style="background-color: #c9302c;"><span>CONFIRM DELETION</span></div>
+            <div class="error-messagebox" style="color:red; font-weight:bold; text-align:center; margin-top:10px;">
+                &nbsp;
+            </div>
+        </form>
+      </div>
+    </div>
+
   </body>
 </html>
+

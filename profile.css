@@ -1,0 +1,101 @@
+.profile-container {
+    margin-left: 220px;
+    padding: 40px;
+    max-width: calc(100% - 220px);
+    height: 100vh;
+    overflow-y: auto;
+    z-index: 2;
+    position: relative;
+}
+
+.profile-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 40px;
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 20px;
+}
+
+body.dark .profile-header {
+    border-bottom-color: #555;
+}
+
+.profile-header h1 {
+    font-size: 2.5rem;
+    font-weight: 500;
+}
+
+.profile-header .buttons {
+    width: auto;
+    padding: 10px 20px;
+}
+
+.user-details, .user-feeds {
+    margin-bottom: 40px;
+}
+
+.user-details h2, .user-feeds h2 {
+    font-size: 1.8rem;
+    font-weight: 400;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+}
+
+body.dark .user-details h2, body.dark .user-feeds h2 {
+    border-bottom-color: #333;
+}
+
+.detail-item {
+    display: flex;
+    font-size: 1.1rem;
+    padding: 15px 0;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+body.dark .detail-item {
+    border-bottom-color: #2a2a2a;
+}
+
+.detail-item:last-child {
+    border-bottom: none;
+}
+
+.detail-label {
+    font-weight: 500;
+    width: 150px;
+    color: #555;
+}
+
+body.dark .detail-label {
+    color: #aaa;
+}
+
+.feed-placeholder {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 200px;
+    border: 2px dashed #ccc;
+    border-radius: 8px;
+    color: #888;
+}
+
+body.dark .feed-placeholder {
+    border-color: #555;
+    color: #777;
+}
+
+@media (max-width: 768px) {
+    .profile-container {
+        margin-left: 0;
+        max-width: 100%;
+        padding: 20px;
+    }
+    .profile-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+}

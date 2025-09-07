@@ -91,28 +91,71 @@ class Controller
         if (!isset($_SESSION['user_id'])) {
             throw new Exception("Not logged in.");
         }
-
+    
         $id = $_SESSION['user_id'];
         $first_name = $this->validate("firstname", true);
         $last_name  = $this->validate("lastname", true);
         $username   = $this->validate("username", true);
         $email      = $this->validate("email", true);
-        $password   = $this->validate("password", true);
-
-        $sql = "UPDATE user_data 
-                SET first_name = ?, last_name = ?, username = ?, email = ?, password = ?
-                WHERE id = ?";
-
-        $stmt = $this->connection->prepare($sql);
-        $stmt->bind_param("sssssi", $first_name, $last_name, $username, $email, $password, $id);
-
+        $password   = $this->validate("password"); // Password is now optional
+    
+        // Check if username is already taken by ANOTHER user
+        $stmt = $this->connection->prepare("SELECT id FROM user_data WHERE username = ? AND id != ?");
+        if (!$stmt) { throw new Exception($this->connection->error); }
+        $stmt->bind_param("si", $username, $id);
+        $stmt->execute();
+        if ($stmt->get_result()->num_rows > 0) {
+            throw new Exception("Το όνομα χρήστη υπάρχει ήδη.");
+        }
+    
+        // Check if email is already taken by ANOTHER user
+        $stmt = $this->connection->prepare("SELECT id FROM user_data WHERE email = ? AND id != ?");
+        if (!$stmt) { throw new Exception($this->connection->error); }
+        $stmt->bind_param("si", $email, $id);
+        $stmt->execute();
+        if ($stmt->get_result()->num_rows > 0) {
+            throw new Exception("Το email χρησιμοποιείται ήδη.");
+        }
+    
+        if (!empty($password)) {
+            // If password is provided, update it along with other fields
+            $sql = "UPDATE user_data 
+                    SET first_name = ?, last_name = ?, username = ?, email = ?, password = ?
+                    WHERE id = ?";
+            $stmt = $this->connection->prepare($sql);
+            if (!$stmt) { throw new Exception($this->connection->error); }
+            $stmt->bind_param("sssssi", $first_name, $last_name, $username, $email, $password, $id);
+        } else {
+            // If password is empty, don't update it
+            $sql = "UPDATE user_data 
+                    SET first_name = ?, last_name = ?, username = ?, email = ?
+                    WHERE id = ?";
+            $stmt = $this->connection->prepare($sql);
+            if (!$stmt) { throw new Exception($this->connection->error); }
+            $stmt->bind_param("ssssi", $first_name, $last_name, $username, $email, $id);
+        }
+    
         if (!$stmt->execute()) {
             throw new Exception($this->connection->error);
         }
-
-        return ["closeModal" => true];
+        
+        // Return a success response with the updated data
+        return [
+            "success" => true,
+            "userData" => [
+                "first_name" => $first_name,
+                "last_name" => $last_name,
+                "username" => $username,
+                "email" => $email
+            ]
+        ];
     }
     
+    public function logout() {
+        session_unset();
+        session_destroy();
+        return ['redirect' => 'index.html'];
+    }
 
     function validate($input, $mandatory=false) {
         if ($mandatory == true && empty($_POST[$input])) {
@@ -143,3 +186,4 @@ class Controller
         }
     }
 }
+

@@ -51,6 +51,10 @@ a:hover {
   color: rgb(195, 0, 0);
 }
 
+.profile-icon {
+  line-height: 0;
+}
+
 .profile-icon img{
   position: relative;
   border: 3px solid;

@@ -52,6 +52,7 @@ index.php
 main.html
 modal.css
 modal.js
+profile.css
 profile.html
 README.md
 register.css
@@ -242,6 +243,10 @@ a {
 
 a:hover {
   color: rgb(195, 0, 0);
+}
+
+.profile-icon {
+  line-height: 0;
 }
 
 .profile-icon img{
@@ -626,7 +631,7 @@ exit;
     <link rel="stylesheet" href="modal.css" />
     <link rel="stylesheet" href="feed.css" />
     <script src="api-call.js"></script>
-    <script defer src="theme.js"></script>
+    <script src="theme.js"></script>
     <script src="modal.js"></script>
   </head>
   <body>
@@ -641,58 +646,25 @@ exit;
       <a href="index.html" class="logo-link">
         <img class="logo" src="Images/logo.png" alt="logo" />
       </a>
+      <a href="#" id="logout-btn" class="logout-button"><span>ΑΠΟΣΥΝΔΕΣΗ</span></a>
     </nav>
 
     <div class="sign-container">
-      <div class="profile-icon auth-button-modal" data-type="edit">
+      <a href="profile.html" class="profile-icon">
         <img src="Images/user-icon.png" alt="User Icon">
-      </div>
+      </a>
     </div>
 
-    <div class="feed-container">
-    <div class="feed">
-    <div class="feed-item"><img></div>
-    <div class="feed-item"><img></div>
-    <div class="feed-item"><img></div>
-    <div class="feed-item"><img></div>
-    <div class="feed-item"><img></div>
-
-    <div id="editModal" class="modal">
-      <div class="modal-content">
-        <span class="close">&times;</span>
-        <form id="editForm" class="register-form" method="post">
-          <div class="label-input">
-            <label for="firstname">ΟΝΟΜΑ</label>
-            <input type="text" name="firstname" required>
-          </div>
-          <div class="label-input">
-            <label for="lastname">ΕΠΩΝΥΜΟ</label>
-            <input type="text" name="lastname" required>
-          </div>
-          <div class="label-input">
-            <label for="username">ΟΝΟΜΑ ΧΡΗΣΤΗ</label>
-            <input type="text" name="username" required>
-          </div>
-          <div class="label-input">
-            <label for="email">EMAIL</label>
-            <input type="email" name="email" required>
-          </div>
-          <div class="label-input">
-            <label for="password">ΚΩΔΙΚΟΣ</label>
-            <input type="password" name="password" required>
-          </div>
-          <div class="buttons auth-button"><span>ΑΝΑΣΕΩΣΗ</span></div>
-          <div class="error-messagebox" style="color:red; font-weight:bold; text-align:center; margin-top:10px;">
-            &nbsp;
-          </div>
-        </form>
+    <!-- <div class="feed-container">
+      <div class="feed">
+        <div class="feed-item"><img></div>
+        <div class="feed-item"><img></div>
+        <div class="feed-item"><img></div>
+        <div class="feed-item"><img></div>
+        <div class="feed-item"><img></div>
       </div>
-    </div>
+    </div> -->
     
-  </div>
-</div>
-
-
   </body>
 </html>
 </file>
@@ -934,6 +906,110 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 </file>
 
+<file path="profile.css">
+.profile-container {
+    margin-left: 220px;
+    padding: 40px;
+    max-width: calc(100% - 220px);
+    height: 100vh;
+    overflow-y: auto;
+    z-index: 2;
+    position: relative;
+}
+
+.profile-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 40px;
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 20px;
+}
+
+body.dark .profile-header {
+    border-bottom-color: #555;
+}
+
+.profile-header h1 {
+    font-size: 2.5rem;
+    font-weight: 500;
+}
+
+.profile-header .buttons {
+    width: auto;
+    padding: 10px 20px;
+}
+
+.user-details, .user-feeds {
+    margin-bottom: 40px;
+}
+
+.user-details h2, .user-feeds h2 {
+    font-size: 1.8rem;
+    font-weight: 400;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+}
+
+body.dark .user-details h2, body.dark .user-feeds h2 {
+    border-bottom-color: #333;
+}
+
+.detail-item {
+    display: flex;
+    font-size: 1.1rem;
+    padding: 15px 0;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+body.dark .detail-item {
+    border-bottom-color: #2a2a2a;
+}
+
+.detail-item:last-child {
+    border-bottom: none;
+}
+
+.detail-label {
+    font-weight: 500;
+    width: 150px;
+    color: #555;
+}
+
+body.dark .detail-label {
+    color: #aaa;
+}
+
+.feed-placeholder {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 200px;
+    border: 2px dashed #ccc;
+    border-radius: 8px;
+    color: #888;
+}
+
+body.dark .feed-placeholder {
+    border-color: #555;
+    color: #777;
+}
+
+@media (max-width: 768px) {
+    .profile-container {
+        margin-left: 0;
+        max-width: 100%;
+        padding: 20px;
+    }
+    .profile-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+}
+</file>
+
 <file path="profile.html">
 <!DOCTYPE html>
 <html lang="en">
@@ -944,10 +1020,9 @@ document.addEventListener("DOMContentLoaded", () => {
     <link rel="stylesheet" href="sidenav.css" />
     <link rel="stylesheet" href="theme.css" />
     <link rel="stylesheet" href="buttons.css" />
-    <link rel="stylesheet" href="accordion.css" />
+    <link rel="stylesheet" href="modal.css" />
     <link rel="stylesheet" href="profile.css" />
-    <script src="api-call.js"></script>
-    <script defer src="theme.js"></script>
+    <script src="theme.js"></script>
     <script src="modal.js"></script>
   </head>
   <body>
@@ -958,11 +1033,101 @@ document.addEventListener("DOMContentLoaded", () => {
       <div class="dark-mode"></div>
     </div>
     
-    <!-- <nav class="sidenav">
+    <nav class="sidenav">
       <a href="index.html" class="logo-link">
         <img class="logo" src="Images/logo.png" alt="logo" />
       </a>
-    </nav> -->
+      <a href="#" id="logout-btn" class="logout-button"><span>ΑΠΟΣΥΝΔΕΣΗ</span></a>
+    </nav>
+
+    <main class="profile-container">
+        <header class="profile-header">
+            <h1>User Profile</h1>
+            <div class="buttons auth-button-modal" data-type="edit"><span>Edit Profile</span></div>
+        </header>
+
+        <section class="user-details">
+            <h2>Details</h2>
+            <div class="detail-item">
+                <span class="detail-label">First Name:</span>
+                <span id="first-name"></span>
+            </div>
+            <div class="detail-item">
+                <span class="detail-label">Last Name:</span>
+                <span id="last-name"></span>
+            </div>
+            <div class="detail-item">
+                <span class="detail-label">Username:</span>
+                <span id="username"></span>
+            </div>
+            <div class="detail-item">
+                <span class="detail-label">Email:</span>
+                <span id="email"></span>
+            </div>
+        </section>
+
+        <section class="user-feeds">
+            <h2>My Feeds</h2>
+            <div class="feed-placeholder">
+                <p>Feed content will be displayed here.</p>
+            </div>
+        </section>
+    </main>
+
+    <div id="editModal" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <form id="editForm" class="register-form" method="post">
+          <div class="label-input">
+            <label for="firstname">ΟΝΟΜΑ</label>
+            <input type="text" name="firstname" required>
+          </div>
+          <div class="label-input">
+            <label for="lastname">ΕΠΩΝΥΜΟ</label>
+            <input type="text" name="lastname" required>
+          </div>
+          <div class="label-input">
+            <label for="username">ΟΝΟΜΑ ΧΡΗΣΤΗ</label>
+            <input type="text" name="username" required>
+          </div>
+          <div class="label-input">
+            <label for="email">EMAIL</label>
+            <input type="email" name="email" required>
+          </div>
+          <div class="label-input">
+            <label for="password">ΚΩΔΙΚΟΣ</label>
+            <input type="password" name="password" required>
+          </div>
+          <div class="buttons auth-button"><span>ΑΝΑΝΕΩΣΗ</span></div>
+          <div class="error-messagebox" style="color:red; font-weight:bold; text-align:center; margin-top:10px;">
+            &nbsp;
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            fetch("index.php?action=getUser")
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error("User not logged in or session expired.");
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    document.getElementById("first-name").textContent = data.first_name;
+                    document.getElementById("last-name").textContent = data.last_name;
+                    document.getElementById("username").textContent = data.username;
+                    document.getElementById("email").textContent = data.email;
+                })
+                .catch(err => {
+                    console.error("Error fetching user data:", err);
+                    // Redirect to login page if user is not authenticated
+                    window.location.href = 'index.html';
+                });
+        });
+    </script>
 
   </body>
 </html>
@@ -1062,6 +1227,23 @@ body.dark input:focus {
   scale: 1;
   width: 100%;
 }
+
+.logout-button {
+  color: white;
+  padding: 15px;
+  text-decoration: none;
+  font-size: 18px;
+  font-weight: 500;
+  width: 100%;
+  text-align: center;
+  margin-bottom: 20px;
+  transition: color 0.3s;
+  cursor: pointer;
+}
+
+.logout-button:hover {
+    color: red;
+}
 </file>
 
 <file path="src/controller.php">
@@ -1158,28 +1340,71 @@ class Controller
         if (!isset($_SESSION['user_id'])) {
             throw new Exception("Not logged in.");
         }
-
+    
         $id = $_SESSION['user_id'];
         $first_name = $this->validate("firstname", true);
         $last_name  = $this->validate("lastname", true);
         $username   = $this->validate("username", true);
         $email      = $this->validate("email", true);
-        $password   = $this->validate("password", true);
-
-        $sql = "UPDATE user_data 
-                SET first_name = ?, last_name = ?, username = ?, email = ?, password = ?
-                WHERE id = ?";
-
-        $stmt = $this->connection->prepare($sql);
-        $stmt->bind_param("sssssi", $first_name, $last_name, $username, $email, $password, $id);
-
+        $password   = $this->validate("password"); // Password is now optional
+    
+        // Check if username is already taken by ANOTHER user
+        $stmt = $this->connection->prepare("SELECT id FROM user_data WHERE username = ? AND id != ?");
+        if (!$stmt) { throw new Exception($this->connection->error); }
+        $stmt->bind_param("si", $username, $id);
+        $stmt->execute();
+        if ($stmt->get_result()->num_rows > 0) {
+            throw new Exception("Το όνομα χρήστη υπάρχει ήδη.");
+        }
+    
+        // Check if email is already taken by ANOTHER user
+        $stmt = $this->connection->prepare("SELECT id FROM user_data WHERE email = ? AND id != ?");
+        if (!$stmt) { throw new Exception($this->connection->error); }
+        $stmt->bind_param("si", $email, $id);
+        $stmt->execute();
+        if ($stmt->get_result()->num_rows > 0) {
+            throw new Exception("Το email χρησιμοποιείται ήδη.");
+        }
+    
+        if (!empty($password)) {
+            // If password is provided, update it along with other fields
+            $sql = "UPDATE user_data 
+                    SET first_name = ?, last_name = ?, username = ?, email = ?, password = ?
+                    WHERE id = ?";
+            $stmt = $this->connection->prepare($sql);
+            if (!$stmt) { throw new Exception($this->connection->error); }
+            $stmt->bind_param("sssssi", $first_name, $last_name, $username, $email, $password, $id);
+        } else {
+            // If password is empty, don't update it
+            $sql = "UPDATE user_data 
+                    SET first_name = ?, last_name = ?, username = ?, email = ?
+                    WHERE id = ?";
+            $stmt = $this->connection->prepare($sql);
+            if (!$stmt) { throw new Exception($this->connection->error); }
+            $stmt->bind_param("ssssi", $first_name, $last_name, $username, $email, $id);
+        }
+    
         if (!$stmt->execute()) {
             throw new Exception($this->connection->error);
         }
-
-        return ["closeModal" => true];
+        
+        // Return a success response with the updated data
+        return [
+            "success" => true,
+            "userData" => [
+                "first_name" => $first_name,
+                "last_name" => $last_name,
+                "username" => $username,
+                "email" => $email
+            ]
+        ];
     }
     
+    public function logout() {
+        session_unset();
+        session_destroy();
+        return ['redirect' => 'index.html'];
+    }
 
     function validate($input, $mandatory=false) {
         if ($mandatory == true && empty($_POST[$input])) {

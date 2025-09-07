@@ -1,26 +1,46 @@
-let modeToggle = document.querySelector('.mode-tog');
-let darkMode = document.querySelector('.dark-mode');
+function initTheme() {
+    const modeToggle = document.querySelector('.mode-tog');
+    const darkMode = document.querySelector('.dark-mode');
 
-let savedMode = localStorage.getItem('mode');
-if (savedMode === 'dark') {
-    darkMode.classList.add('no-transition');
-    darkMode.classList.add('active');
-    modeToggle.classList.add('active');
-    document.body.classList.add('dark');
+    if (!modeToggle || !darkMode) {
+        console.warn("Theme toggle elements not found.");
+        return;
+    }
 
-    setTimeout(() => {
-        darkMode.classList.remove('no-transition');
-    }, 0);
+    const applyTheme = (theme) => {
+        const isDark = theme === 'dark';
+        darkMode.classList.toggle('active', isDark);
+        modeToggle.classList.toggle('active', isDark);
+        document.body.classList.toggle('dark', isDark);
+    };
+
+    const toggleTheme = () => {
+        const isDark = !document.body.classList.contains('dark');
+        localStorage.setItem('mode', isDark ? 'dark' : 'light');
+        applyTheme(isDark ? 'dark' : 'light');
+    };
+
+    // Apply saved theme on initialization, preventing a flash of incorrect theme
+    const savedMode = localStorage.getItem('mode');
+    if (savedMode) {
+        darkMode.classList.add('no-transition');
+        applyTheme(savedMode);
+        // Use requestAnimationFrame to remove the transition override after the first paint
+        requestAnimationFrame(() => {
+            darkMode.classList.remove('no-transition');
+        });
+    }
+
+    // Ensure the event listener is attached only once to prevent issues.
+    if (!modeToggle.dataset.themeInitialized) {
+        modeToggle.addEventListener('click', toggleTheme);
+        modeToggle.dataset.themeInitialized = 'true';
+    }
 }
 
-modeToggle.addEventListener('click', () => {
-    darkMode.classList.toggle('active');
-    modeToggle.classList.toggle('active');
-    document.body.classList.toggle('dark');
-
-    if (darkMode.classList.contains('active')) {
-        localStorage.setItem('mode', 'dark');
-    } else {
-        localStorage.setItem('mode', 'light');
-    }
-});
+// Run the theme initializer as soon as the DOM is interactive or already complete.
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initTheme);
+} else {
+    initTheme();
+}

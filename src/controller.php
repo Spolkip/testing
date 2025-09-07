@@ -2,7 +2,7 @@
 class Controller
 {
     private $requestMethod;
-
+    
     private $connection;
 
     function __construct($conn) {
@@ -93,32 +93,48 @@ class Controller
         }
     
         $id = $_SESSION['user_id'];
+
+        // First, get the user's current data to compare against
+        $stmt = $this->connection->prepare("SELECT username, email FROM user_data WHERE id = ?");
+        if (!$stmt) { throw new Exception($this->connection->error); }
+        $stmt->bind_param("i", $id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $currentUser = $result->fetch_assoc();
+        if (!$currentUser) {
+            throw new Exception("User could not be found.");
+        }
+
         $first_name = $this->validate("firstname", true);
         $last_name  = $this->validate("lastname", true);
         $username   = $this->validate("username", true);
         $email      = $this->validate("email", true);
-        $password   = $this->validate("password"); // Password is now optional
+        $password   = $this->validate("password"); // Password is optional
     
-        // Check if username is already taken by ANOTHER user
-        $stmt = $this->connection->prepare("SELECT id FROM user_data WHERE username = ? AND id != ?");
-        if (!$stmt) { throw new Exception($this->connection->error); }
-        $stmt->bind_param("si", $username, $id);
-        $stmt->execute();
-        if ($stmt->get_result()->num_rows > 0) {
-            throw new Exception("Το όνομα χρήστη υπάρχει ήδη.");
+        // Only check for username uniqueness if it has been changed
+        if ($username !== $currentUser['username']) {
+            $stmt = $this->connection->prepare("SELECT id FROM user_data WHERE username = ?");
+            if (!$stmt) { throw new Exception($this->connection->error); }
+            $stmt->bind_param("s", $username);
+            $stmt->execute();
+            if ($stmt->get_result()->num_rows > 0) {
+                throw new Exception("Το όνομα χρήστη υπάρχει ήδη.");
+            }
         }
     
-        // Check if email is already taken by ANOTHER user
-        $stmt = $this->connection->prepare("SELECT id FROM user_data WHERE email = ? AND id != ?");
-        if (!$stmt) { throw new Exception($this->connection->error); }
-        $stmt->bind_param("si", $email, $id);
-        $stmt->execute();
-        if ($stmt->get_result()->num_rows > 0) {
-            throw new Exception("Το email χρησιμοποιείται ήδη.");
+        // Only check for email uniqueness if it has been changed
+        if ($email !== $currentUser['email']) {
+            $stmt = $this->connection->prepare("SELECT id FROM user_data WHERE email = ?");
+            if (!$stmt) { throw new Exception($this->connection->error); }
+            $stmt->bind_param("s", $email);
+            $stmt->execute();
+            if ($stmt->get_result()->num_rows > 0) {
+                throw new Exception("Το email χρησιμοποιείται ήδη.");
+            }
         }
     
         if (!empty($password)) {
-            // If password is provided, update it along with other fields
+            // If a new password is provided, update it
             $sql = "UPDATE user_data 
                     SET first_name = ?, last_name = ?, username = ?, email = ?, password = ?
                     WHERE id = ?";
@@ -126,7 +142,7 @@ class Controller
             if (!$stmt) { throw new Exception($this->connection->error); }
             $stmt->bind_param("sssssi", $first_name, $last_name, $username, $email, $password, $id);
         } else {
-            // If password is empty, don't update it
+            // If the password field is empty, do not update the password
             $sql = "UPDATE user_data 
                     SET first_name = ?, last_name = ?, username = ?, email = ?
                     WHERE id = ?";
@@ -139,7 +155,7 @@ class Controller
             throw new Exception($this->connection->error);
         }
         
-        // Return a success response with the updated data
+        // Return a success response with the newly updated data
         return [
             "success" => true,
             "userData" => [
@@ -162,7 +178,7 @@ class Controller
             throw new Exception('Όλα τα πεδία είναι υποχρεωτικά!');
         }
 
-        return htmlspecialchars(stripcslashes($_POST[$input] ?? '')); // https://www.php.net/manual/en/function.stripslashes.php
+        return htmlspecialchars(stripcslashes($_POST[$input] ?? '')); // https://www.php.net/manual/en/function/stripslashes.php
     }
 
     public function getRequestMethod() {
